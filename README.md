@@ -1,0 +1,1 @@
+# cupet-awards-query
