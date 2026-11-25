@@ -44,11 +44,14 @@ function card(x){
  const inferred=r?.track_assessment?.method==='rules_inferred';
  const team=Array.isArray(r?.students)&&r.students.length?r.students.map(maskName).join('、')+(r.students_complete===false?'（报道列出，可能不全）':''):'报道未明确分组或未公布';
  const teachers=Array.isArray(r?.teachers)&&r.teachers.length?r.teachers.map(maskName).join('、'):'报道未明确或未公布';
+ const linkedReport=r?sourceLink(r.source_url):'';
+ const reportSource=linkedReport||(r?.source_publisher?esc(r.source_publisher)+'公众号'+(r.source_title?' · '+esc(r.source_title):''):'');
+ const reportLine=[reportSource,r?.published_date?'发布于 '+esc(r.published_date):''].filter(Boolean).join(' · ');
  const original=x.record_origin==='official_news'?'高校官方报道补录':('原序号 '+esc(x.id)+(x.page==null?'':' · 名单第 '+esc(x.page)+' 页'));
  const notes=(r?.uncertainties||[]).filter(v=>typeof v==='string');
- return '<article class="card"><div class="top"><strong>'+esc(x.school)+'</strong><div class="badgegroup"><span class="tag '+(second?'award-second':'award-first')+'">'+award+'</span><span class="tag '+(!verified?'pending':'')+'">'+(verified?'高校官网核实':esc(x.status||'待核实'))+'</span></div></div>'+
+ return '<article class="card"><div class="top"><strong>'+esc(x.school)+'</strong><div class="badgegroup"><span class="tag '+(second?'award-second':'award-first')+'">'+award+'</span><span class="tag '+(!verified?'pending':'')+'">'+(verified?(r?.source_type==='official_wechat_capture'?'高校公众号核实':'高校官网核实'):esc(x.status||'待核实'))+'</span></div></div>'+
  '<p class="title">'+esc(x.topic)+'</p><div class="meta"><p>'+esc(r?.track||x.category)+(inferred?' <span class="tag pending">赛道按规则判定</span>':'')+'</p><p>'+original+' · '+esc(x.campus_status||'未单列校区')+'</p>'+
- (r?'<p>参赛选手：'+esc(team)+'</p><p>指导教师：'+esc(teachers)+'</p><p>'+sourceLink(r.source_url)+(r.published_date?' · 发布于 '+esc(r.published_date):'')+'</p>':'')+'</div>'+
+ (r?'<p>参赛选手：'+esc(team)+'</p><p>指导教师：'+esc(teachers)+'</p>'+(reportLine?'<p>'+reportLine+'</p>':''):'')+'</div>'+
  (inferred?'<details class="rule"><summary>赛道判断依据</summary><p>'+esc(r.track_assessment.basis)+'</p><p>'+esc(r.track_assessment.source_filename)+' · 第 '+esc(r.track_assessment.source_page)+' 页</p></details>':'')+
  (notes.length?'<div class="uncertainty">'+notes.map(esc).join('<br>')+'</div>':'')+'</article>';
 }
@@ -86,6 +89,9 @@ async function loadRecentSchools(){
    const meta=document.createElement('div');meta.className='recent-meta';
    const date=document.createElement('time');date.textContent=typeof item.published_date==='string'?item.published_date:'日期未注明';meta.appendChild(date);
    try{const url=new URL(item.source_url);if(url.protocol==='https:'){const link=document.createElement('a');link.className='source';link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent='查看报道';meta.appendChild(link)}}catch{}
+   if(!meta.querySelector('a')&&typeof item.source_publisher==='string'&&item.source_publisher){
+    const publisher=document.createElement('span');publisher.textContent=item.source_publisher+'公众号';meta.appendChild(publisher);
+   }
    card.appendChild(meta);container.appendChild(card);
   }
  }catch{container.textContent='最近报道暂时无法加载，请稍后刷新页面。'}
