@@ -9,7 +9,7 @@
 <section class="panel"><form id="search"><label for="school">高校全称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
 <div class="chips" style="margin-top:16px"><button data-name="电子科技大学">电子科技大学</button><button data-name="四川师范大学">四川师范大学</button><button data-name="南京邮电大学">南京邮电大学</button><button data-name="安徽理工大学">安徽理工大学</button><button data-name="东北林业大学">东北林业大学</button></div>
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
-<p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名以编号匿名显示。</p>
+<p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
 </section>
 <div class="stats" id="stats"></div><div class="resultbar"><strong id="count" aria-live="polite">请输入高校全称</strong></div><div id="track-summary"></div><div id="results"></div>
 <details class="method"><summary>统计口径与数据说明</summary>
@@ -24,13 +24,19 @@ const cats=['命题类','自选类','讲课类','国际赛道','未注明赛道'
 const el=id=>document.getElementById(id);
 let controller, rows=[], school='', loaded=false;
 function sourceLink(url){try{const u=new URL(url);return u.protocol==='https:'?'<a class="source" href="'+esc(u.href)+'" target="_blank" rel="noopener noreferrer">查看高校官方报道</a>':''}catch{return ''}}
+function maskName(value){
+ const name=typeof value==='string'?value.trim():'';
+ if(!name)return '姓名未公布';
+ if(/^[^*\s]{1,2}\*+$/.test(name))return name;
+ return Array.from(name)[0]+'**';
+}
 function card(x){
  const r=x.official_report, second=x.award_level==='二等奖';
  const verified=!!r||String(x.status).startsWith('高校官网核实');
  const award=second?'二等奖':verified?'一等奖':'拟授一等奖';
  const inferred=r?.track_assessment?.method==='rules_inferred';
- const team=Array.isArray(r?.students)&&r.students.length?r.students.map((_,i)=>'选手 '+(i+1)).join('、')+(r.students_complete===false?'（报道列出，可能不全）':''):'报道未明确分组或未公布';
- const teachers=Array.isArray(r?.teachers)&&r.teachers.length?r.teachers.map((_,i)=>'教师 '+(i+1)).join('、'):'报道未明确或未公布';
+ const team=Array.isArray(r?.students)&&r.students.length?r.students.map(maskName).join('、')+(r.students_complete===false?'（报道列出，可能不全）':''):'报道未明确分组或未公布';
+ const teachers=Array.isArray(r?.teachers)&&r.teachers.length?r.teachers.map(maskName).join('、'):'报道未明确或未公布';
  const original=x.record_origin==='official_news'?'高校官方报道补录':('原序号 '+esc(x.id)+(x.page==null?'':' · 名单第 '+esc(x.page)+' 页'));
  const notes=(r?.uncertainties||[]).filter(v=>typeof v==='string');
  return '<article class="card"><div class="top"><strong>'+esc(x.school)+'</strong><div class="badgegroup"><span class="tag '+(second?'award-second':'award-first')+'">'+award+'</span><span class="tag '+(!verified?'pending':'')+'">'+(verified?'高校官网核实':esc(x.status||'待核实'))+'</span></div></div>'+
