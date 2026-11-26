@@ -1,0 +1,4 @@
+project_id = "cupet-awards-query"
+
+[functions.cupet-comments]
+verify_jwt = false
