@@ -20,7 +20,8 @@
 .download-summary{font-size:14px;padding:7px 12px}
 .download-status{font-size:13px;color:#587080}
 .download-status:empty{display:none}
-.ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
+.ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-help{margin:12px 0;color:#426577}.ranking-help summary{cursor:pointer;font-weight:600;color:#086a71}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}.ranking-school-label{flex:1;max-width:330px;min-width:200px!important}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
+#ranking-school{display:block;margin:8px 0 0;padding:10px 12px;font-size:16px;min-height:42px}
 .guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
 .guestbook h2{font-size:18px;margin:0 0 16px}
 .guestbook textarea{width:100%;display:block;margin:10px 0 0;padding:12px;border:1px solid #b9cdd7;border-radius:8px;font:inherit;color:inherit;resize:vertical}
@@ -91,11 +92,13 @@
 <p>“赛道按规则判定”表示结合作品题名和竞赛文件归类，尚待官方参赛明细确认；其判断依据和不确定性随作品列出。未公布的信息保持空缺，不以同校其他作品的人员代填。</p>
 <p>按高校全称查询；原名单未注明校区一般按本部处理，四川师范大学各项目校区待核。官网补录作品不编造原名单序号或页码。原始照片和完整数据文件不在公开网页中。</p></details>
 </div><div id="ranking-view" hidden><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖排名</p><h1>高校获奖排名</h1><p>按年度、赛道和高校范围查看获奖排名。</p></div></div><section class="panel ranking" id="ranking-panel" aria-labelledby="ranking-heading"><h2 id="ranking-heading">高校获奖排名</h2>
+<details class="ranking-help"><summary>排名规则与统计口径</summary>
 <p class="ranking-note">按已收录的一等奖、二等奖、三等奖、优秀奖数量依次排序，四项数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。2020—2026 年合计按各年已收录数据累计，三等奖及优秀奖仅含 2020—2025 年；常规赛道包括命题、自选、讲课类。校区按数据库归并校名统计。2026 年另有 17 项一等奖校名待核实，保留在数据库作品总数中，暂不参与高校排名。</p>
 <p class="ranking-note">2020 年部分作品题名、赛道仍待核实，学校和奖项已按原始名单计入；2021 年讲课类目前仅收录官网作品集的一、二等奖，三等奖及优秀奖尚缺。年度及合计排名均为已收录数据排名，未收录不代表未获奖。</p>
-<div class="ranking-controls"><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="2021">2021 年</option><option value="2020">2020 年</option><option value="all">2020—2026 年合计</option></select></label>
-<label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
 <p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
+<p class="ranking-note" id="ranking-coverage"></p></details>
+<div class="ranking-controls"><label class="ranking-school-label" for="ranking-school">搜索高校<input id="ranking-school" type="search" placeholder="输入高校名称" autocomplete="off"></label><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="2021">2021 年</option><option value="2020">2020 年</option><option value="all">2020—2026 年合计</option></select></label>
+<label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
 <div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></section></div>
 <div id="comments-view" hidden>
  <div class="intro"><div><h1>留言</h1><p>欢迎反馈获奖信息、提供高校官方报道链接或提出查询建议。提交后会立即公开，请勿填写联系方式等个人信息。</p></div></div>
@@ -476,12 +479,20 @@ async function renderRanking(){
    if(group==='normal')return name.includes('师范')||name.includes('师专')||name==='西南大学';
    return true;
   }).sort((a,b)=>b.first-a.first||b.second-a.second||b.third-a.third||b.excellent-a.excellent||a.school.localeCompare(b.school,'zh-CN'));
-  const body=el('ranking-body');body.replaceChildren();
-  rows.forEach((row,index)=>{
-   const tr=document.createElement('tr');
+  let previousRank=0;
+  const ranked=rows.map((row,index)=>{
    const previous=rows[index-1];
    const tied=previous&&['first','second','third','excellent'].every(field=>previous[field]===row[field]);
-   const rank=tied?body.lastChild.firstChild.textContent:String(index+1);
+   const rank=tied?previousRank:index+1;
+   previousRank=rank;
+   return {row,rank};
+  });
+  const normalizeSchool=value=>value.normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase();
+  const keyword=normalizeSchool(el('ranking-school').value);
+  const shown=keyword?ranked.filter(item=>normalizeSchool(item.row.school).includes(keyword)):ranked;
+  const body=el('ranking-body');body.replaceChildren();
+  shown.forEach(({row,rank})=>{
+   const tr=document.createElement('tr');
    const cells=[rank,row.school,row.first,row.second,year==='2026'?'—':row.third,year==='2026'?'—':row.excellent];
    cells.forEach((value,i)=>{
     const td=document.createElement('td');
@@ -494,8 +505,9 @@ async function renderRanking(){
    });
    body.appendChild(tr);
   });
-  el('ranking-status').textContent=rows.length?'共 '+rows.length+' 所已收录高校。'+(years.includes('2026')?' 2026 年数据尚不完整。':'')+(years.includes('2021')?' 2021 年讲课类仅含已收录的一、二等奖。':'')+(years.includes('2020')?' 2020 年部分赛道和题名待核实。':''):'该范围暂无已收录的高校。';
-  el('ranking-table-wrap').hidden=rows.length===0;
+  el('ranking-coverage').textContent=(years.includes('2026')?'2026 年数据尚不完整。':'')+(years.includes('2021')?' 2021 年讲课类仅含已收录的一、二等奖。':'')+(years.includes('2020')?' 2020 年部分赛道和题名待核实。':'');
+  el('ranking-status').textContent=shown.length?(keyword?'找到 '+shown.length+' 所高校；显示当前筛选范围中的原排名。':'共 '+rows.length+' 所已收录高校。'):(keyword?'当前筛选范围内没有匹配的高校。':'该范围暂无已收录的高校。');
+  el('ranking-table-wrap').hidden=shown.length===0;
  }catch{if(request===rankingRequest)el('ranking-status').textContent='排名暂时无法加载，请稍后重试。'}
 }
 let rankingInitialized=false;
@@ -513,6 +525,7 @@ function showView(view){
 for(const name of ['query','ranking','comments']){
  el('view-'+name+'-button').addEventListener('click',()=>showView(name));
 }
+el('ranking-school').addEventListener('input',renderRanking);
 el('ranking-year').addEventListener('change',renderRanking);
 el('ranking-group').addEventListener('change',renderRanking);
 el('ranking-scope').addEventListener('change',renderRanking);
@@ -654,5 +667,6 @@ async function loadPageViews(){
 }
 loadPageViews();
 </script></body></html>
+
 
 
