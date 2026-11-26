@@ -64,20 +64,26 @@ function maskName(value){
  if(/^[^*\s]{1,2}\*+$/.test(name))return name;
  return Array.from(name)[0]+'**';
 }
-function card(x){
+function awardDetails(x){
  const r=x.official_report, second=x.award_level==='二等奖';
  const verified=isVerified(x);
  const award=second?'二等奖':verified?'一等奖':'拟授一等奖';
  const inferred=r?.track_assessment?.method==='rules_inferred';
  const team=Array.isArray(r?.students)&&r.students.length?r.students.map(maskName).join('、')+(r.students_complete===false?'（报道列出，可能不全）':''):'报道未明确分组或未公布';
  const teachers=Array.isArray(r?.teachers)&&r.teachers.length?r.teachers.map(maskName).join('、'):'报道未明确或未公布';
+ const track=r?.track||x.category;
+ const status=verified?(r?.source_type==='official_wechat_capture'?'高校公众号核实':'高校官网核实'):x.status||'待核实';
+ const original=x.record_origin==='official_news'?'高校官方报道补录':('原序号 '+x.id+(x.page==null?'':' · 名单第 '+x.page+' 页'));
+ const notes=(r?.uncertainties||[]).filter(v=>typeof v==='string');
+ return {r,second,verified,award,inferred,team,teachers,track,status,original,notes};
+}
+function card(x){
+ const {r,second,verified,award,inferred,team,teachers,track,status,original,notes}=awardDetails(x);
  const linkedReport=r?sourceLink(r.source_url):'';
  const reportSource=linkedReport||(r?.source_publisher?esc(r.source_publisher)+'公众号'+(r.source_title?' · '+esc(r.source_title):''):'');
  const reportLine=[reportSource,r?.published_date?'发布于 '+esc(r.published_date):''].filter(Boolean).join(' · ');
- const original=x.record_origin==='official_news'?'高校官方报道补录':('原序号 '+esc(x.id)+(x.page==null?'':' · 名单第 '+esc(x.page)+' 页'));
- const notes=(r?.uncertainties||[]).filter(v=>typeof v==='string');
- return '<article class="card"><div class="top"><strong>'+esc(x.school)+'</strong><div class="badgegroup"><span class="tag '+(second?'award-second':'award-first')+'">'+award+'</span><span class="tag '+(!verified?'pending':'')+'">'+(verified?(r?.source_type==='official_wechat_capture'?'高校公众号核实':'高校官网核实'):esc(x.status||'待核实'))+'</span></div></div>'+
- '<p class="title">'+esc(x.topic)+'</p><div class="meta"><p>'+esc(r?.track||x.category)+(inferred?' <span class="tag pending">赛道按规则判定</span>':'')+'</p><p>'+original+' · '+esc(x.campus_status||'未单列校区')+'</p>'+
+ return '<article class="card"><div class="top"><strong>'+esc(x.school)+'</strong><div class="badgegroup"><span class="tag '+(second?'award-second':'award-first')+'">'+award+'</span><span class="tag '+(!verified?'pending':'')+'">'+esc(status)+'</span></div></div>'+
+ '<p class="title">'+esc(x.topic)+'</p><div class="meta"><p>'+esc(track)+(inferred?' <span class="tag pending">赛道按规则判定</span>':'')+'</p><p>'+esc(original)+' · '+esc(x.campus_status||'未单列校区')+'</p>'+
  (r?'<p>参赛选手：'+esc(team)+'</p><p>指导教师：'+esc(teachers)+'</p>'+(reportLine?'<p>'+reportLine+'</p>':''):'')+'</div>'+
  (inferred?'<details class="rule"><summary>赛道判断依据</summary><p>'+esc(r.track_assessment.basis)+'</p><p>'+esc(r.track_assessment.source_filename)+' · 第 '+esc(r.track_assessment.source_page)+' 页</p></details>':'')+
  (notes.length?'<div class="uncertainty">'+notes.map(esc).join('<br>')+'</div>':'')+'</article>';
@@ -183,10 +189,35 @@ function makeSummaryCanvas(){
  });
  const yCurrent=200+(schoolLines.length-1)*64;
  const yPast=yCurrent+290;
- const height=yPast+330;
- canvas.width=width*2;canvas.height=height*2;
- ctx.scale(2,2);
- const colors={ink:'#173447',muted:'#4d6979',teal:'#0b746e',white:'#fff',background:'#f3f6f9'};
+ const colors={ink:'#173447',muted:'#4d6979',teal:'#0b746e',amber:'#82551c',white:'#fff',background:'#f3f6f9'};
+ const detailsTop=yPast+190;
+ const detailWidth=width-2*margin;
+ const detailCards=rows.map(row=>{
+  const {r,verified,award,inferred,team,teachers,track,status,original,notes}=awardDetails(row);
+  const lines=[];
+  const add=(value,size,color=colors.ink,weight=400)=>{
+   setFont(size,weight);
+   for(const valueLine of wrap(value,detailWidth-56))lines.push({value:valueLine,size,color,weight,leading:size+10});
+  };
+  add(award+' · '+status,23,verified?colors.teal:colors.amber,700);
+  add(row.topic||'作品题名待核实',30,colors.ink,700);
+  add([track+(inferred?'（按规则判定）':''),row.school,original,row.campus_status].filter(Boolean).join(' · '),21,colors.muted);
+  if(r){
+   add('参赛选手  '+team,21,colors.muted);
+   add('指导教师  '+teachers,21,colors.muted);
+   const source=r.source_publisher?r.source_publisher+'公众号':r.source_url?'高校官方报道':'';
+   const date=r.published_date?'发布于 '+r.published_date:'';
+   const credit=[source,date].filter(Boolean).join(' · ');
+   if(credit)add(credit,20,colors.muted);
+  }
+  for(const note of notes)add(note,19,colors.muted);
+  return {lines,height:40+lines.reduce((sum,line)=>sum+line.leading,0)};
+ });
+ const lastY=detailCards.length?detailsTop+76+detailCards.reduce((sum,card)=>sum+card.height+12,0):yPast+203;
+ const height=lastY+127;
+ const scale=Math.min(2,4096/height);
+ canvas.width=Math.round(width*scale);canvas.height=Math.round(height*scale);
+ ctx.scale(scale,scale);
  const text=(value,x,y,size,color=colors.ink,weight=400)=>{
   setFont(size,weight);ctx.fillStyle=color;ctx.fillText(value,x,y);
  };
@@ -224,7 +255,19 @@ function makeSummaryCanvas(){
  }else{
   text(pastFailed?'2025 年查询暂不可用':'2025 年名单未查到该校记录',margin+24,yPast+101,24,colors.muted);
  }
- const lastY=yPast+203;
+ if(detailCards.length){
+  text('2026 年获奖详情',margin,detailsTop+27,31,colors.ink,700);
+  let cardY=detailsTop+46;
+  for(const card of detailCards){
+   rounded(margin,cardY,detailWidth,card.height,14,colors.white);
+   let lineY=cardY+20;
+   for(const line of card.lines){
+    text(line.value,margin+28,lineY+line.size,line.size,line.color,line.weight);
+    lineY+=line.leading;
+   }
+   cardY+=card.height+12;
+  }
+ }
  text('2026 年二等奖持续补录，统计为网页已收录数量。',margin,lastY,22,colors.muted);
  text('2025 年来源 · 获奖名单-2025.xlsx',margin,lastY+33,22,colors.muted);
  const date=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric'}).format(new Date());
