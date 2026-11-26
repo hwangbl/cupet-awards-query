@@ -31,7 +31,7 @@
 </section>
 <section class="panel recent" aria-labelledby="recent-title"><h2 id="recent-title">最近公开报道的高校</h2><p>按已收录的高校官方报道发布时间排序，每校显示最近一条；点击学校名称查询。</p><div id="recent-schools" class="recent-list" aria-live="polite"><span class="recent-status">正在加载最近报道…</span></div><button id="recent-toggle" type="button" aria-expanded="false" aria-controls="recent-schools" hidden>查看全部报道高校</button></section>
 <details class="panel ranking" id="ranking-panel"><summary>高校获奖排名</summary>
-<p class="ranking-note">按所选年份已收录的一等奖作品数排序，数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。五年合计的后两项仅含 2022—2025 年；常规赛道包括命题、自选、讲课类。校区按数据库归并校名统计，校名待核实的记录暂不参与排名。</p>
+<p class="ranking-note">按已收录的一等奖、二等奖、三等奖、优秀奖数量依次排序，四项数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。五年合计的后两项仅含 2022—2025 年；常规赛道包括命题、自选、讲课类。校区按数据库归并校名统计，校名待核实的记录暂不参与排名。</p>
 <div class="ranking-controls"><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="all">2022—2026 年合计</option></select></label>
 <label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
 <p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
@@ -424,11 +424,13 @@ async function renderRanking(){
    if(group==='211')return colleges211.has(name)||colleges985.has(name);
    if(group==='normal')return name.includes('师范')||name.includes('师专')||name==='西南大学';
    return true;
-  }).sort((a,b)=>b.first-a.first||a.school.localeCompare(b.school,'zh-CN'));
+  }).sort((a,b)=>b.first-a.first||b.second-a.second||b.third-a.third||b.excellent-a.excellent||a.school.localeCompare(b.school,'zh-CN'));
   const body=el('ranking-body');body.replaceChildren();
   rows.forEach((row,index)=>{
    const tr=document.createElement('tr');
-   const rank=index>0&&rows[index-1].first===row.first?body.lastChild.firstChild.textContent:String(index+1);
+   const previous=rows[index-1];
+   const tied=previous&&['first','second','third','excellent'].every(field=>previous[field]===row[field]);
+   const rank=tied?body.lastChild.firstChild.textContent:String(index+1);
    const cells=[rank,row.school,row.first,row.second,year==='2026'?'—':row.third,year==='2026'?'—':row.excellent];
    cells.forEach((value,i)=>{
     const td=document.createElement('td');
