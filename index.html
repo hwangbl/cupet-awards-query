@@ -363,9 +363,9 @@ async function loadPageViews(){
   });
   if(!response.ok)throw Error();
   const {today,total}=await response.json();
-  if(!Number.isSafeInteger(today)||!Number.isSafeInteger(total)||today<1||total<today)throw Error();
+  if(!Number.isSafeInteger(today)||!Number.isSafeInteger(total)||today<0||total<today)throw Error();
   const formatter=new Intl.NumberFormat('zh-CN');
-  const counts=[['累计访问',total],['今日访问',today]].map(([label,value])=>{
+  const counts=[['累计去重访问',total],['今日去重访问',today]].map(([label,value])=>{
    const item=document.createElement('span');
    const number=document.createElement('strong');
    number.textContent=formatter.format(value);
@@ -373,7 +373,7 @@ async function loadPageViews(){
    return item;
   });
   const timezone=document.createElement('span');
-  timezone.textContent='按北京时间统计';
+  timezone.textContent='北京时间，每个 IP 每天计 1 次';
   counter.replaceChildren(...counts,timezone);
  }catch{
   counter.textContent='访问统计暂时不可用';
