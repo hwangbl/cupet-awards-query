@@ -25,7 +25,7 @@
 <header><span class="brand">CUPET <b>2026</b></span><span>全国大学生物理实验竞赛 · 创新</span></header>
 <main><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查询 2026 年获奖作品及 2022–2025 年获奖数量。</p></div></div>
 <section class="panel"><form id="search"><label for="school">高校全称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
-<div class="chips" style="margin-top:16px"><button data-name="电子科技大学">电子科技大学</button><button data-name="四川师范大学">四川师范大学</button><button data-name="南京邮电大学">南京邮电大学</button><button data-name="安徽理工大学">安徽理工大学</button><button data-name="东北林业大学">东北林业大学</button></div>
+<div id="recent-queries" style="margin-top:16px" hidden><label>最近查询的高校</label><div id="recent-query-list" class="chips" style="margin-top:8px"></div></div>
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
 <p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
 </section>
@@ -167,6 +167,7 @@ async function search(){
   if(controller!==request)return;
   rows=data.map(x=>({...x,award_level:x.award_level||'一等奖'}));
   loaded=true;
+  rememberSchool(q);
   render();
  }).catch(()=>{
   if(controller!==request)return;
@@ -185,7 +186,28 @@ async function search(){
 }
 el('search').onsubmit=e=>{e.preventDefault();search()};
 el('award-filter').onchange=render;
-document.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{el('school').value=b.dataset.name;search()});
+const recentQueryKey='cupet-recent-school-queries';
+let recentQueries=[];
+try{
+ const saved=JSON.parse(localStorage.getItem(recentQueryKey)||'[]');
+ if(Array.isArray(saved))recentQueries=saved.filter(name=>typeof name==='string'&&name.length>=3&&name.length<=60).slice(0,5);
+}catch{}
+function renderRecentQueries(){
+ const wrapper=el('recent-queries'), list=el('recent-query-list');
+ list.replaceChildren();wrapper.hidden=recentQueries.length===0;
+ for(const name of recentQueries){
+  const button=document.createElement('button');
+  button.type='button';button.textContent=name;
+  button.onclick=()=>{el('school').value=name;search()};
+  list.appendChild(button);
+ }
+}
+function rememberSchool(name){
+ recentQueries=[name,...recentQueries.filter(item=>item!==name)].slice(0,5);
+ try{localStorage.setItem(recentQueryKey,JSON.stringify(recentQueries))}catch{}
+ renderRecentQueries();
+}
+renderRecentQueries();
 function makeSummaryCanvas(){
  const width=1080, margin=64;
  const canvas=document.createElement('canvas');
