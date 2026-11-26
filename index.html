@@ -489,7 +489,8 @@ async function renderRanking(){
   });
   const normalizeSchool=value=>value.normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase();
   const keyword=normalizeSchool(el('ranking-school').value);
-  const shown=keyword?ranked.filter(item=>normalizeSchool(item.row.school).includes(keyword)):ranked;
+  const exact=keyword?ranked.filter(item=>normalizeSchool(item.row.school)===keyword):[];
+  const shown=!keyword?ranked:exact.length?exact:ranked.filter(item=>normalizeSchool(item.row.school).includes(keyword));
   const body=el('ranking-body');body.replaceChildren();
   shown.forEach(({row,rank})=>{
    const tr=document.createElement('tr');
