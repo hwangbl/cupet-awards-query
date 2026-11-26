@@ -21,9 +21,24 @@
 .download-status{font-size:13px;color:#587080}
 .download-status:empty{display:none}
 .ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
+.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
+.guestbook h2{font-size:18px;margin:0 0 16px}
+.guestbook textarea{width:100%;display:block;margin:10px 0 0;padding:12px;border:1px solid #b9cdd7;border-radius:8px;font:inherit;color:inherit;resize:vertical}
+.guestbook textarea:focus-visible{outline:2px solid #129c90;outline-offset:2px}
+.guestbook button:disabled{opacity:.6;cursor:wait}
+.comment-submit{background:#073a4e;color:#fff;border-color:#073a4e}
+.comment-submit:hover{background:#10566c}
+.comment-note{font-size:14px;color:#587080;margin:8px 0 12px}
+.comment-note:empty{display:none}
+.comment-entry{padding:14px 0;border-bottom:1px solid #e0e8ed}
+.comment-entry header{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px 12px;background:none;color:inherit;padding:0;overflow-wrap:anywhere}
+.comment-entry header time{font-size:13px;color:#587080}
+.comment-entry p{margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+#comment-more{margin-top:16px}
+@media(max-width:700px){.guestbook{grid-template-columns:1fr}}
 </style></head><body>
 <header><span class="brand">CUPET <b>2026</b></span><span>全国大学生物理实验竞赛 · 创新</span></header>
-<main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查询 2026 年获奖作品及 2022–2025 年获奖数量。</p></div></div>
+<main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button><button type="button" id="view-comments-button">留言</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查询 2026 年获奖作品及 2022–2025 年获奖数量。</p></div></div>
 <section class="panel"><form id="search"><label for="school">高校全称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
 <div id="recent-queries" style="margin-top:16px" hidden><label>最近查询的高校</label><div id="recent-query-list" class="chips" style="margin-top:8px"></div></div>
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
@@ -70,6 +85,29 @@
 <label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
 <p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
 <div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></section></div>
+<div id="comments-view" hidden>
+ <div class="intro"><div><h1>留言</h1><p>欢迎反馈获奖信息、提供高校官方报道链接或提出查询建议。留言经审核后公开显示，请勿填写联系方式等个人信息。</p></div></div>
+ <div class="guestbook">
+  <section class="panel" aria-labelledby="comment-form-heading">
+   <h2 id="comment-form-heading">发表留言</h2>
+   <form id="comment-form">
+    <label for="comment-nickname">昵称（选填）</label>
+    <input id="comment-nickname" name="nickname" placeholder="匿名访客" maxlength="30" autocomplete="off">
+    <label for="comment-message">留言内容</label>
+    <textarea id="comment-message" name="message" rows="6" maxlength="1000" required aria-describedby="comment-limit"></textarea>
+    <p id="comment-limit" class="comment-note">最多 1000 字符。</p>
+    <button class="comment-submit" type="submit">提交留言</button>
+    <p id="comment-submit-status" class="comment-note" role="status"></p>
+   </form>
+  </section>
+  <section class="panel" aria-labelledby="comment-list-heading">
+   <h2 id="comment-list-heading">公开留言</h2>
+   <p id="comment-status" class="comment-note" role="status"></p>
+   <div id="comment-list"></div>
+   <button id="comment-more" type="button" hidden>查看更多留言</button>
+  </section>
+ </div>
+</div>
 <footer>
  <div>CUPET 2026 · 高校获奖查询</div>
  <div id="page-views" class="page-views" role="status">访问统计加载中…</div>
@@ -450,20 +488,123 @@ async function renderRanking(){
 }
 let rankingInitialized=false;
 function showView(view){
- const ranking=view==='ranking';
- el('query-view').hidden=ranking;
- el('ranking-view').hidden=!ranking;
- for(const [id,active] of [['view-query-button',!ranking],['view-ranking-button',ranking]]){
-  const button=el(id);button.classList.toggle('active',active);
+ for(const name of ['query','ranking','comments']){
+  const active=name===view;
+  el(name+'-view').hidden=!active;
+  const button=el('view-'+name+'-button');
+  button.classList.toggle('active',active);
   if(active)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
  }
- if(ranking&&!rankingInitialized){rankingInitialized=true;renderRanking()}
+ if(view==='ranking'&&!rankingInitialized){rankingInitialized=true;renderRanking()}
+ if(view==='comments'&&!commentsLoaded)loadComments();
 }
-el('view-query-button').addEventListener('click',()=>showView('query'));
-el('view-ranking-button').addEventListener('click',()=>showView('ranking'));
+for(const name of ['query','ranking','comments']){
+ el('view-'+name+'-button').addEventListener('click',()=>showView(name));
+}
 el('ranking-year').addEventListener('change',renderRanking);
 el('ranking-group').addEventListener('change',renderRanking);
 el('ranking-scope').addEventListener('change',renderRanking);
+
+const commentEndpoint=new URL('cupet-comments',endpoint);
+const commentDate=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',dateStyle:'medium'});
+let commentsLoaded=false;
+let commentsLoading=false;
+let commentCursor=null;
+let commentAttempt=null;
+
+async function loadComments(older=false){
+ if(commentsLoading)return;
+ commentsLoading=true;
+ const status=el('comment-status');
+ const more=el('comment-more');
+ const list=el('comment-list');
+ const url=new URL(commentEndpoint);
+ if(older&&commentCursor)url.searchParams.set('before',commentCursor);
+ status.textContent='正在加载留言…';
+ more.disabled=true;
+ try{
+  const response=await fetch(url,{signal:AbortSignal.timeout(10000)});
+  if(!response.ok)throw Error();
+  const data=await response.json();
+  if(!Array.isArray(data.comments))throw Error();
+
+  const entries=document.createDocumentFragment();
+  for(const comment of data.comments){
+   const article=document.createElement('article');
+   article.className='comment-entry';
+   const header=document.createElement('header');
+   const name=document.createElement('strong');
+   name.textContent=comment.nickname;
+   const date=document.createElement('time');
+   date.dateTime=comment.created_at;
+   date.textContent=commentDate.format(new Date(comment.created_at));
+   header.append(name,date);
+   const message=document.createElement('p');
+   message.textContent=comment.message;
+   article.append(header,message);
+   entries.append(article);
+  }
+
+  if(!older)list.replaceChildren();
+  list.append(entries);
+  commentCursor=data.nextBefore;
+  more.hidden=!commentCursor;
+  more.textContent='查看更多留言';
+  status.textContent=list.childElementCount?'':'暂无公开留言。';
+  commentsLoaded=true;
+ }catch{
+  status.textContent='留言加载失败，请重试。';
+  more.hidden=false;
+  more.textContent='重新加载留言';
+ }finally{
+  commentsLoading=false;
+  more.disabled=false;
+ }
+}
+el('comment-more').addEventListener('click',()=>loadComments(Boolean(commentCursor)));
+
+el('comment-form').addEventListener('submit',async event=>{
+ event.preventDefault();
+ const form=event.currentTarget;
+ const button=form.querySelector('button[type="submit"]');
+ if(button.disabled)return;
+ const status=el('comment-submit-status');
+ const nickname=el('comment-nickname').value.trim();
+ const message=el('comment-message').value.trim();
+ if(!message){
+  status.textContent='请输入留言内容。';
+  el('comment-message').focus();
+  return;
+ }
+
+ if(commentAttempt?.nickname!==nickname||commentAttempt?.message!==message){
+  commentAttempt={requestId:crypto.randomUUID(),nickname,message};
+ }
+ button.disabled=true;
+ status.textContent='正在提交…';
+ try{
+  const response=await fetch(commentEndpoint,{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify(commentAttempt),
+   signal:AbortSignal.timeout(10000)
+  });
+  if(response.status===429){
+   status.textContent='当前提交较多，请稍后重试。';
+   return;
+  }
+  if(response.status!==202)throw Error();
+  if(el('comment-message').value.trim()===message&&el('comment-nickname').value.trim()===nickname){
+   form.reset();
+  }
+  commentAttempt=null;
+  status.textContent='留言已提交，等待审核。';
+ }catch{
+  status.textContent='暂未收到提交确认，请重试。';
+ }finally{
+  button.disabled=false;
+ }
+});
 
 async function loadPageViews(){
  const counter=el('page-views');
