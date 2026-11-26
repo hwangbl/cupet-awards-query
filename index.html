@@ -6,18 +6,42 @@
 .page-views{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin-top:8px;color:#526c79;font-variant-numeric:tabular-nums}
 .page-views span{white-space:nowrap}
 .page-views strong{color:#173447}
+.historical-summary{margin:18px 0 20px;padding:14px 18px;background:#edf4f7;border:1px solid #d5e2e9;border-radius:10px;color:#395968}
+.historical-summary h2{font-size:15px;color:#173447;margin:0 0 8px}
+#history-counts{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px}
+#history-counts strong{color:#173447}
+#history-details{margin-top:8px;font-size:14px}
+#history-details summary{cursor:pointer;color:#126d68;width:fit-content}
+#history-details ol{margin:8px 0 2px;padding-left:24px}
+#history-details li{padding:8px 0;border-top:1px solid #d5e2e9}
+.history-meta{display:block;font-size:13px;margin-top:3px}
+.resultbar{flex-wrap:wrap;gap:10px}
+.download-summary{font-size:14px;padding:7px 12px}
+.download-status{font-size:13px;color:#587080}
+.download-status:empty{display:none}
+[hidden]{display:none!important}
 </style></head><body>
 <header><span class="brand">CUPET <b>2026</b></span><span>全国大学生物理实验竞赛 · 创新</span></header>
-<main><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查看已收录的一等奖、二等奖作品。</p></div></div>
+<main><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查询 2026 年获奖作品和 2025 年获奖数量。</p></div></div>
 <section class="panel"><form id="search"><label for="school">高校全称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
 <div class="chips" style="margin-top:16px"><button data-name="电子科技大学">电子科技大学</button><button data-name="四川师范大学">四川师范大学</button><button data-name="南京邮电大学">南京邮电大学</button><button data-name="安徽理工大学">安徽理工大学</button><button data-name="东北林业大学">东北林业大学</button></div>
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
 <p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
 </section>
 <section class="panel recent" aria-labelledby="recent-title"><h2 id="recent-title">最近公开报道的高校</h2><p>按已收录的高校官方报道发布时间排序，每校显示最近一条；点击学校名称查询。</p><div id="recent-schools" class="recent-list" aria-live="polite"><span class="recent-status">正在加载最近报道…</span></div></section>
-<div class="stats" id="stats"></div><div class="resultbar"><strong id="count" aria-live="polite">请输入高校全称</strong></div><div id="track-summary"></div><div id="results"></div>
+<div class="stats" id="stats"></div>
+<div class="resultbar"><strong id="count" aria-live="polite">请输入高校全称</strong><button id="download-summary" class="download-summary" type="button" hidden>下载获奖汇总图（PNG）</button></div>
+<div id="download-status" class="download-status" role="status"></div>
+<div id="track-summary"></div>
+<section id="historical-summary" class="historical-summary" aria-labelledby="history-title" hidden>
+ <h2 id="history-title">2025 年获奖情况</h2>
+ <div id="history-counts" aria-live="polite">正在查询 2025 年名单…</div>
+ <details id="history-details" hidden><summary>展开 2025 年获奖明细</summary><ol id="history-entries"></ol></details>
+</section>
+<div id="results"></div>
 <details class="method"><summary>统计口径与数据说明</summary>
-<p>一等奖以现场拟授一等奖名单为基础，并以高校官方报道核实题名和师生信息；二等奖仅收录官方报道中可明确识别的获奖作品。统计显示的是已收录数量，不代表该校完整获奖总数。</p>
+<p>2025 年数据来自《获奖名单-2025.xlsx》的作品明细，共含四类奖项。明确标注的校区可随学校全称查询，作品明细保留原校名。</p>
+<p>2026 年一等奖以现场拟授一等奖名单为基础，并以高校官方报道核实题名和师生信息；二等奖仅收录官方报道中可明确识别的获奖作品。统计显示的是已收录数量，不代表该校完整获奖总数。</p>
 <p>“赛道按规则判定”表示结合作品题名和竞赛文件归类，尚待官方参赛明细确认；其判断依据和不确定性随作品列出。未公布的信息保持空缺，不以同校其他作品的人员代填。</p>
 <p>按高校全称查询；原名单未注明校区一般按本部处理，四川师范大学各项目校区待核。官网补录作品不编造原名单序号或页码。原始照片和完整数据文件不在公开网页中。</p></details>
 <footer>
@@ -29,7 +53,10 @@ const endpoint='https://uthmwaopzuudunbkguqm.supabase.co/functions/v1/school-sea
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const cats=['命题类','自选类','讲课类','国际赛道','未注明赛道'];
 const el=id=>document.getElementById(id);
-let controller, rows=[], school='', loaded=false;
+const historyLevels=['一等奖','二等奖','三等奖','优秀奖'];
+let controller, rows=[], school='', loaded=false, currentFailed=false, pastRows=null, pastFailed=false, pastLoading=false;
+const countAward=(data,level)=>data.filter(row=>row.award_level===level).length;
+const isVerified=row=>!!row.official_report||String(row.status).startsWith('高校官网核实');
 function sourceLink(url){try{const u=new URL(url);return u.protocol==='https:'?'<a class="source" href="'+esc(u.href)+'" target="_blank" rel="noopener noreferrer">查看高校官方报道</a>':''}catch{return ''}}
 function maskName(value){
  const name=typeof value==='string'?value.trim():'';
@@ -39,7 +66,7 @@ function maskName(value){
 }
 function card(x){
  const r=x.official_report, second=x.award_level==='二等奖';
- const verified=!!r||String(x.status).startsWith('高校官网核实');
+ const verified=isVerified(x);
  const award=second?'二等奖':verified?'一等奖':'拟授一等奖';
  const inferred=r?.track_assessment?.method==='rules_inferred';
  const team=Array.isArray(r?.students)&&r.students.length?r.students.map(maskName).join('、')+(r.students_complete===false?'（报道列出，可能不全）':''):'报道未明确分组或未公布';
@@ -58,23 +85,176 @@ function card(x){
 function render(){
  if(!loaded)return;
  const level=el('award-filter').value, shown=rows.filter(x=>level==='all'||x.award_level===level);
- const first=rows.filter(x=>x.award_level==='一等奖').length,second=rows.filter(x=>x.award_level==='二等奖').length;
- el('stats').innerHTML=rows.length?[['已收录合计',rows.length],['一等奖（含拟授）',first],['二等奖（已核实）',second]].map(([a,b])=>'<div class="stat"><strong>'+b+'</strong><span>'+a+'</span></div>').join(''):'';
- el('count').textContent=school+' · 已收录 '+rows.length+' 项 · 当前显示 '+shown.length+' 项';
+ const first=countAward(rows,'一等奖'),second=countAward(rows,'二等奖');
+ el('stats').innerHTML=rows.length?[['2026 年已收录',rows.length],['一等奖（含拟授）',first],['二等奖（已核实）',second]].map(([a,b])=>'<div class="stat"><strong>'+b+'</strong><span>'+a+'</span></div>').join(''):'';
+ el('count').textContent=school+' · 2026 年已收录 '+rows.length+' 项 · 当前显示 '+shown.length+' 项';
  el('track-summary').textContent=shown.length?cats.map(c=>[c,shown.filter(x=>x.category===c).length]).filter(([,n])=>n).map(([c,n])=>c+' '+n+' 项').join(' · '):'';
  el('results').innerHTML=shown.length?shown.map(card).join(''):'<div class="empty">'+(rows.length?'暂未收录该校'+esc(level)+'作品；不代表未获奖。':'未查到该高校，请检查全称；未收录不代表未获奖。')+'</div>';
 }
+function renderHistory(){
+ const counts=el('history-counts'), details=el('history-details');
+ details.hidden=!pastRows?.length;
+ if(!pastRows?.length){
+  counts.textContent=pastFailed?'2025 年名单暂时无法查询。':pastRows?'2025 年名单未查到该校记录。':'正在查询 2025 年名单…';
+  return;
+ }
+ counts.innerHTML=[['合计',pastRows.length],...historyLevels.map(level=>[level,countAward(pastRows,level)])]
+  .map(([label,n])=>'<span>'+esc(label)+' <strong>'+n+'</strong> 项</span>').join('');
+ el('history-entries').innerHTML=pastRows.map(item=>
+  '<li><strong>'+esc(item.topic)+'</strong><span class="history-meta">'+esc(item.school)+' · '+esc(item.category)+' · '+esc(item.award_level)+'</span>'+
+  '<span class="history-meta">参赛选手：'+esc(item.students.map(maskName).join('、'))+' · 指导教师：'+esc(item.teachers.map(maskName).join('、'))+'</span></li>').join('');
+}
+function updateDownload(){
+ el('download-summary').hidden=pastLoading||(!rows.length&&!pastRows?.length);
+}
 async function search(){
- const q=el('school').value.trim();if(q.length<3){el('count').textContent='请输入完整高校名称';return}
- controller?.abort();const current=new AbortController();controller=current;
- loaded=false;rows=[];el('count').textContent='正在查询…';el('results').innerHTML='';el('stats').innerHTML='';el('track-summary').textContent='';
- try{const r=await fetch(endpoint+'?include_second=true&school='+encodeURIComponent(q),{signal:current.signal});if(!r.ok)throw Error();const data=await r.json();if(!Array.isArray(data))throw Error();if(controller!==current)return;
- rows=data.map(x=>({...x,award_level:x.award_level||'一等奖'}));school=q;loaded=true;render();
- }catch(e){if(e.name!=='AbortError'&&controller===current)el('count').textContent='查询暂时不可用，请稍后重试。'}
+ const q=el('school').value.trim();
+ if(q.length<3){el('count').textContent='请输入完整高校名称';return}
+ controller?.abort();
+ const request=new AbortController();
+ controller=request;
+ school=q;loaded=false;currentFailed=false;rows=[];pastRows=null;pastFailed=false;pastLoading=true;
+ el('count').textContent='正在查询 2026 年获奖情况…';
+ for(const id of ['results','stats','track-summary','download-status','history-entries'])el(id).textContent='';
+ el('historical-summary').hidden=false;
+ el('history-details').open=false;
+ updateDownload();
+ renderHistory();
+ const timeout=setTimeout(()=>request.abort(),12000);
+ const fetchYear=async year=>{
+  const query=new URLSearchParams({school:q,year,include_second:'true'});
+  const res=await fetch(endpoint+'?'+query,{signal:request.signal});
+  if(!res.ok)throw Error();
+  const data=await res.json();
+  if(!Array.isArray(data))throw Error();
+  return data;
+ };
+ const current=fetchYear('2026').then(data=>{
+  if(controller!==request)return;
+  rows=data.map(x=>({...x,award_level:x.award_level||'一等奖'}));
+  loaded=true;
+  render();
+ }).catch(()=>{
+  if(controller!==request)return;
+  currentFailed=true;
+  el('count').textContent='2026 年查询暂时不可用，请稍后重试。';
+ });
+ const historical=fetchYear('2025').then(data=>{
+  if(controller!==request)return;
+  pastRows=data;
+ }).catch(()=>{
+  if(controller!==request)return;
+  pastFailed=true;
+ }).finally(()=>{
+  if(controller!==request)return;
+  pastLoading=false;
+  renderHistory();
+ });
+ await Promise.all([current,historical]);
+ clearTimeout(timeout);
+ if(controller===request)updateDownload();
 }
 el('search').onsubmit=e=>{e.preventDefault();search()};
 el('award-filter').onchange=render;
 document.querySelectorAll('[data-name]').forEach(b=>b.onclick=()=>{el('school').value=b.dataset.name;search()});
+function makeSummaryCanvas(){
+ const width=1080, margin=64;
+ const canvas=document.createElement('canvas');
+ const ctx=canvas.getContext('2d');
+ if(!ctx)throw Error('Canvas unavailable');
+ const font='system-ui, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif';
+ const setFont=(size,weight=400)=>{ctx.font=weight+' '+size+'px '+font};
+ const wrap=(value,maxWidth)=>{
+  const lines=[];
+  let line='';
+  for(const char of value){
+   if(line&&ctx.measureText(line+char).width>maxWidth){lines.push(line);line=''}
+   line+=char;
+  }
+  if(line)lines.push(line);
+  return lines;
+ };
+ setFont(54,700);
+ const schoolLines=wrap(school,width-2*margin);
+ const pending=rows.filter(row=>row.award_level==='一等奖'&&!isVerified(row)).length;
+ const tracks=cats.flatMap(category=>{
+  const count=rows.filter(row=>row.category===category).length;
+  return count?[category+' '+count+' 项']:[];
+ });
+ const yCurrent=200+(schoolLines.length-1)*64;
+ const yPast=yCurrent+290;
+ const height=yPast+330;
+ canvas.width=width*2;canvas.height=height*2;
+ ctx.scale(2,2);
+ const colors={ink:'#173447',muted:'#4d6979',teal:'#0b746e',white:'#fff',background:'#f3f6f9'};
+ const text=(value,x,y,size,color=colors.ink,weight=400)=>{
+  setFont(size,weight);ctx.fillStyle=color;ctx.fillText(value,x,y);
+ };
+ const rounded=(x,y,w,h,r,fill)=>{
+  ctx.fillStyle=fill;ctx.beginPath();
+  if(typeof ctx.roundRect==='function')ctx.roundRect(x,y,w,h,r);else ctx.rect(x,y,w,h);
+  ctx.fill();
+ };
+ ctx.fillStyle=colors.background;ctx.fillRect(0,0,width,height);
+ ctx.fillStyle='#073a4e';ctx.fillRect(0,0,width,yCurrent-22);
+ text('全国大学生物理实验竞赛（创新）',margin,52,25,'#b8e9e1',600);
+ schoolLines.forEach((line,i)=>text(line,margin,128+i*64,54,colors.white,700));
+ text('高校获奖汇总',margin,166+(schoolLines.length-1)*64,24,'#d7e5ea');
+ rounded(margin,yCurrent,width-2*margin,262,20,colors.white);
+ text('2026 年 · 本年已收录',margin+28,yCurrent+49,32,colors.ink,700);
+ if(currentFailed){
+  text('2026 年查询暂不可用',margin+28,yCurrent+120,26,colors.muted);
+ }else{
+  const current=[['已收录合计',rows.length],['一等奖',countAward(rows,'一等奖')],['二等奖',countAward(rows,'二等奖')]];
+  const boxWidth=276;
+  current.forEach(([label,value],i)=>{
+   const x=margin+28+i*(boxWidth+18);
+   rounded(x,yCurrent+70,boxWidth,92,12,i===0?'#e1f2f0':'#f3f6f9');
+   text(String(value),x+18,yCurrent+121,40,i===0?colors.teal:colors.ink,700);
+   text(label,x+18,yCurrent+150,19,colors.muted);
+  });
+  text(pending?'一等奖含拟授 '+pending+' 项':'拟授一等奖 '+pending+' 项',margin+28,yCurrent+203,23,colors.muted);
+  text(tracks.length?tracks.join('   ·   '):'2026 年暂无已收录作品',margin+28,yCurrent+236,21,colors.muted);
+ }
+ rounded(margin,yPast,width-2*margin,158,16,'#e8eff3');
+ text('2025 年 · 往年成绩',margin+24,yPast+45,28,colors.ink,700);
+ if(pastRows?.length){
+  text('合计 '+pastRows.length+' 项',width-margin-188,yPast+45,25,colors.ink,600);
+  historyLevels.forEach((level,i)=>text(level+' '+countAward(pastRows,level)+' 项',margin+24+i*232,yPast+103,24,colors.muted));
+ }else{
+  text(pastFailed?'2025 年查询暂不可用':'2025 年名单未查到该校记录',margin+24,yPast+101,24,colors.muted);
+ }
+ const lastY=yPast+203;
+ text('2026 年二等奖持续补录，统计为网页已收录数量。',margin,lastY,22,colors.muted);
+ text('2025 年来源 · 获奖名单-2025.xlsx',margin,lastY+33,22,colors.muted);
+ const date=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric'}).format(new Date());
+ text('查询日期 '+date+'  ·  hwangbl.github.io/cupet-awards-query/',margin,lastY+82,20,colors.muted);
+ return canvas;
+}
+function downloadSummary(){
+ const status=el('download-status');
+ const queriedSchool=school;
+ const query=controller;
+ status.textContent='';
+ try{
+  makeSummaryCanvas().toBlob(blob=>{
+   if(controller!==query)return;
+   if(!blob){status.textContent='图片生成失败，请重试。';return}
+   const url=URL.createObjectURL(blob);
+   const link=document.createElement('a');
+   link.href=url;
+   link.download=queriedSchool.replace(/[\\/:*?"<>|]/g,'_')+'-CUPET获奖汇总.png';
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),1000);
+  },'image/png');
+ }catch{
+  status.textContent='图片生成失败，请重试。';
+ }
+}
+el('download-summary').onclick=downloadSummary;
+
 async function loadRecentSchools(){
  const container=el('recent-schools');
  try{
