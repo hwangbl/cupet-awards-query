@@ -92,7 +92,7 @@ Deno.serve(async (req) => {
     const result = await response.json();
     if (result === "busy") return reply({ error: "busy" }, 429);
     if (result !== "accepted") return reply({ error: "unavailable" }, 503);
-    return reply({ status: "pending" }, 202);
+    return reply({ status: "published" }, 202);
   } catch {
     return reply({ error: "unavailable" }, 503);
   }

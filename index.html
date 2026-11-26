@@ -86,7 +86,7 @@
 <p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
 <div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></section></div>
 <div id="comments-view" hidden>
- <div class="intro"><div><h1>留言</h1><p>欢迎反馈获奖信息、提供高校官方报道链接或提出查询建议。留言经审核后公开显示，请勿填写联系方式等个人信息。</p></div></div>
+ <div class="intro"><div><h1>留言</h1><p>欢迎反馈获奖信息、提供高校官方报道链接或提出查询建议。提交后会立即公开，请勿填写联系方式等个人信息。</p></div></div>
  <div class="guestbook">
   <section class="panel" aria-labelledby="comment-form-heading">
    <h2 id="comment-form-heading">发表留言</h2>
@@ -509,11 +509,13 @@ const commentEndpoint=new URL('cupet-comments',endpoint);
 const commentDate=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',dateStyle:'medium'});
 let commentsLoaded=false;
 let commentsLoading=false;
+let commentsRequest=0;
 let commentCursor=null;
 let commentAttempt=null;
 
 async function loadComments(older=false){
- if(commentsLoading)return;
+ if(older&&commentsLoading)return;
+ const request=++commentsRequest;
  commentsLoading=true;
  const status=el('comment-status');
  const more=el('comment-more');
@@ -527,6 +529,7 @@ async function loadComments(older=false){
   if(!response.ok)throw Error();
   const data=await response.json();
   if(!Array.isArray(data.comments))throw Error();
+  if(request!==commentsRequest)return;
 
   const entries=document.createDocumentFragment();
   for(const comment of data.comments){
@@ -553,12 +556,15 @@ async function loadComments(older=false){
   status.textContent=list.childElementCount?'':'暂无公开留言。';
   commentsLoaded=true;
  }catch{
+  if(request!==commentsRequest)return;
   status.textContent='留言加载失败，请重试。';
   more.hidden=false;
   more.textContent='重新加载留言';
  }finally{
-  commentsLoading=false;
-  more.disabled=false;
+  if(request===commentsRequest){
+   commentsLoading=false;
+   more.disabled=false;
+  }
  }
 }
 el('comment-more').addEventListener('click',()=>loadComments(Boolean(commentCursor)));
@@ -598,7 +604,8 @@ el('comment-form').addEventListener('submit',async event=>{
    form.reset();
   }
   commentAttempt=null;
-  status.textContent='留言已提交，等待审核。';
+  status.textContent='留言已发布。';
+  loadComments();
  }catch{
   status.textContent='暂未收到提交确认，请重试。';
  }finally{
