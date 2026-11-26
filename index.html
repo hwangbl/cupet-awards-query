@@ -20,7 +20,7 @@
 .download-summary{font-size:14px;padding:7px 12px}
 .download-status{font-size:13px;color:#587080}
 .download-status:empty{display:none}
-[hidden]{display:none!important}
+.ranking{margin-top:20px}.ranking>summary{cursor:pointer;font-size:18px;font-weight:700}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
 </style></head><body>
 <header><span class="brand">CUPET <b>2026</b></span><span>全国大学生物理实验竞赛 · 创新</span></header>
 <main><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查询 2026 年获奖作品及 2022–2025 年获奖数量。</p></div></div>
@@ -30,6 +30,12 @@
 <p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
 </section>
 <section class="panel recent" aria-labelledby="recent-title"><h2 id="recent-title">最近公开报道的高校</h2><p>按已收录的高校官方报道发布时间排序，每校显示最近一条；点击学校名称查询。</p><div id="recent-schools" class="recent-list" aria-live="polite"><span class="recent-status">正在加载最近报道…</span></div><button id="recent-toggle" type="button" aria-expanded="false" aria-controls="recent-schools" hidden>查看全部报道高校</button></section>
+<details class="panel ranking" id="ranking-panel"><summary>高校获奖排名</summary>
+<p class="ranking-note">按所选年份已收录的一等奖作品数排序，数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整。校区按数据库归并校名统计。</p>
+<div class="ranking-controls"><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="all">2022—2026 年合计</option></select></label>
+<label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label></div>
+<p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
+<div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></details>
 <div class="stats" id="stats"></div>
 <div class="resultbar"><strong id="count" aria-live="polite">请输入高校全称</strong><button id="download-summary" class="download-summary" type="button" hidden>下载获奖汇总图（PNG）</button></div>
 <div id="download-status" class="download-status" role="status"></div>
@@ -380,6 +386,66 @@ async function loadRecentSchools(){
  }catch{container.textContent='最近报道暂时无法加载，请稍后刷新页面。'}
 }
 loadRecentSchools();
+
+
+const colleges985=new Set('北京大学 中国人民大学 清华大学 北京航空航天大学 北京理工大学 中国农业大学 北京师范大学 中央民族大学 南开大学 天津大学 大连理工大学 东北大学 吉林大学 哈尔滨工业大学 复旦大学 同济大学 上海交通大学 华东师范大学 南京大学 东南大学 浙江大学 中国科学技术大学 厦门大学 山东大学 中国海洋大学 武汉大学 华中科技大学 湖南大学 中南大学 国防科技大学 国防科学技术大学 中山大学 华南理工大学 四川大学 电子科技大学 重庆大学 西安交通大学 西北工业大学 西北农林科技大学 兰州大学'.split(' '));
+const colleges211=new Set(('北京大学 中国人民大学 清华大学 北京交通大学 北京工业大学 北京航空航天大学 北京理工大学 北京科技大学 北京化工大学 北京邮电大学 中国农业大学 北京林业大学 北京中医药大学 北京师范大学 北京外国语大学 中国传媒大学 中央财经大学 对外经济贸易大学 北京体育大学 中央音乐学院 中央民族大学 中国政法大学 华北电力大学 南开大学 天津大学 天津医科大学 河北工业大学 太原理工大学 内蒙古大学 辽宁大学 大连理工大学 东北大学 大连海事大学 吉林大学 延边大学 东北师范大学 哈尔滨工业大学 哈尔滨工程大学 东北农业大学 东北林业大学 复旦大学 同济大学 上海交通大学 华东理工大学 东华大学 华东师范大学 上海外国语大学 上海财经大学 上海大学 第二军医大学 海军军医大学 南京大学 苏州大学 东南大学 南京航空航天大学 南京理工大学 中国矿业大学 中国矿业大学（北京） 河海大学 江南大学 南京农业大学 中国药科大学 南京师范大学 浙江大学 安徽大学 中国科学技术大学 合肥工业大学 厦门大学 福州大学 南昌大学 山东大学 中国海洋大学 中国石油大学 中国石油大学（北京） 中国石油大学（华东） 郑州大学 武汉大学 华中科技大学 中国地质大学 中国地质大学（北京） 中国地质大学（武汉） 武汉理工大学 华中农业大学 华中师范大学 中南财经政法大学 湖南大学 中南大学 湖南师范大学 国防科学技术大学 国防科技大学 中山大学 暨南大学 华南理工大学 华南师范大学 广西大学 海南大学 四川大学 西南交通大学 电子科技大学 四川农业大学 西南财经大学 重庆大学 西南大学 贵州大学 云南大学 西藏大学 西北大学 西安交通大学 西北工业大学 西安电子科技大学 长安大学 西北农林科技大学 陕西师范大学 第四军医大学 空军军医大学 兰州大学 青海大学 宁夏大学 新疆大学 石河子大学').split(' '));
+const rankingCache=new Map();
+let rankingRequest=0;
+async function getRankingYear(year){
+ if(rankingCache.has(year))return rankingCache.get(year);
+ const response=await fetch(endpoint+'?rankings=true&year='+encodeURIComponent(year));
+ if(!response.ok)throw Error('排名暂时不可用');
+ const data=await response.json();
+ if(!Array.isArray(data.schools))throw Error('排名数据格式错误');
+ rankingCache.set(year,data.schools);
+ return data.schools;
+}
+async function renderRanking(){
+ const request=++rankingRequest,year=el('ranking-year').value,group=el('ranking-group').value;
+ el('ranking-status').textContent='正在计算排名…';el('ranking-table-wrap').hidden=true;
+ try{
+  const years=year==='all'?['2022','2023','2024','2025','2026']:[year];
+  const lists=await Promise.all(years.map(getRankingYear));
+  if(request!==rankingRequest)return;
+  const merged=new Map();
+  for(const list of lists)for(const item of list){
+   if(typeof item.school!=='string'||!item.school.trim())continue;
+   const name=item.school.trim();
+   if(!merged.has(name))merged.set(name,{school:name,first:0,second:0,third:0,excellent:0});
+   const row=merged.get(name);
+   for(const field of ['first','second','third','excellent'])row[field]+=Number(item[field])||0;
+  }
+  const rows=Array.from(merged.values()).filter(row=>{
+   const name=row.school.replace(/\(/g,'（').replace(/\)/g,'）');
+   if(group==='985')return colleges985.has(name);
+   if(group==='211')return colleges211.has(name)||colleges985.has(name);
+   if(group==='normal')return name.includes('师范')||name.includes('师专')||name==='西南大学';
+   return true;
+  }).sort((a,b)=>b.first-a.first||a.school.localeCompare(b.school,'zh-CN'));
+  const body=el('ranking-body');body.replaceChildren();
+  rows.forEach((row,index)=>{
+   const tr=document.createElement('tr');
+   const rank=index>0&&rows[index-1].first===row.first?body.lastChild.firstChild.textContent:String(index+1);
+   const cells=[rank,row.school,row.first,row.second,row.third,row.excellent];
+   cells.forEach((value,i)=>{
+    const td=document.createElement('td');
+    if(i===1){
+     const button=document.createElement('button');button.type='button';button.textContent=value;
+     button.onclick=()=>{el('school').value=row.school;search();el('school').scrollIntoView({behavior:'smooth',block:'center'})};
+     td.appendChild(button);
+    }else td.textContent=String(value);
+    tr.appendChild(td);
+   });
+   body.appendChild(tr);
+  });
+  el('ranking-status').textContent=rows.length?'共 '+rows.length+' 所已收录高校。'+(years.includes('2026')?' 2026 年数据尚不完整。':''):'该范围暂无已收录的高校。';
+  el('ranking-table-wrap').hidden=rows.length===0;
+ }catch{if(request===rankingRequest)el('ranking-status').textContent='排名暂时无法加载，请稍后重试。'}
+}
+el('ranking-panel').addEventListener('toggle',()=>{if(el('ranking-panel').open)renderRanking()});
+el('ranking-year').addEventListener('change',renderRanking);
+el('ranking-group').addEventListener('change',renderRanking);
 
 async function loadPageViews(){
  const counter=el('page-views');
