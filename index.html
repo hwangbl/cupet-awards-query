@@ -29,7 +29,7 @@
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
 <p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
 </section>
-<section class="panel recent" aria-labelledby="recent-title"><h2 id="recent-title">最近公开报道的高校</h2><p>按已收录的高校官方报道发布时间排序，每校显示最近一条；点击学校名称查询。</p><div id="recent-schools" class="recent-list" aria-live="polite"><span class="recent-status">正在加载最近报道…</span></div></section>
+<section class="panel recent" aria-labelledby="recent-title"><h2 id="recent-title">最近公开报道的高校</h2><p>按已收录的高校官方报道发布时间排序，每校显示最近一条；点击学校名称查询。</p><div id="recent-schools" class="recent-list" aria-live="polite"><span class="recent-status">正在加载最近报道…</span></div><button id="recent-toggle" type="button" aria-expanded="false" aria-controls="recent-schools" hidden>查看全部报道高校</button></section>
 <div class="stats" id="stats"></div>
 <div class="resultbar"><strong id="count" aria-live="polite">请输入高校全称</strong><button id="download-summary" class="download-summary" type="button" hidden>下载获奖汇总图（PNG）</button></div>
 <div id="download-status" class="download-status" role="status"></div>
@@ -329,25 +329,32 @@ function downloadSummary(){
 }
 el('download-summary').onclick=downloadSummary;
 
+let recentEntries=[];
+let recentExpanded=false;
+function renderRecentSchools(){
+ const container=el('recent-schools');
+ container.replaceChildren();
+ const entries=recentExpanded?recentEntries:recentEntries.slice(0,5);
+ if(!entries.length){container.textContent='暂无已收录的公开报道。';return}
+ for(const item of entries){
+  const card=document.createElement('div');card.className='recent-item';
+  const button=document.createElement('button');button.type='button';button.textContent=item.school;button.onclick=()=>{el('school').value=item.school;search()};card.appendChild(button);
+  const meta=document.createElement('div');meta.className='recent-meta';
+  const date=document.createElement('time');date.textContent=typeof item.published_date==='string'?item.published_date:'日期未注明';meta.appendChild(date);
+  try{const url=new URL(item.source_url);if(url.protocol==='https:'){const link=document.createElement('a');link.className='source';link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent='查看报道';meta.appendChild(link)}}catch{}
+  if(!meta.querySelector('a')&&typeof item.source_publisher==='string'&&item.source_publisher){const publisher=document.createElement('span');publisher.textContent=item.source_publisher+'公众号';meta.appendChild(publisher)}
+  card.appendChild(meta);container.appendChild(card);
+ }
+ const toggle=el('recent-toggle');toggle.hidden=recentEntries.length<=5;toggle.setAttribute('aria-expanded',String(recentExpanded));toggle.textContent=recentExpanded?'收起报道高校':'查看全部报道高校（'+recentEntries.length+' 所）';
+}
+el('recent-toggle').onclick=()=>{recentExpanded=!recentExpanded;renderRecentSchools()};
 async function loadRecentSchools(){
  const container=el('recent-schools');
  try{
-  const response=await fetch(endpoint+'?recent_schools=true');if(!response.ok)throw Error();
+  const response=await fetch(endpoint+'?recent_schools=true&all=true');if(!response.ok)throw Error();
   const data=await response.json();if(!Array.isArray(data.schools))throw Error();
-  container.replaceChildren();
-  const entries=data.schools.filter(x=>x&&typeof x.school==='string'&&x.school.trim()).slice(0,5);
-  if(!entries.length){container.textContent='暂无已收录的公开报道。';return}
-  for(const item of entries){
-   const card=document.createElement('div');card.className='recent-item';
-   const button=document.createElement('button');button.type='button';button.textContent=item.school;button.onclick=()=>{el('school').value=item.school;search()};card.appendChild(button);
-   const meta=document.createElement('div');meta.className='recent-meta';
-   const date=document.createElement('time');date.textContent=typeof item.published_date==='string'?item.published_date:'日期未注明';meta.appendChild(date);
-   try{const url=new URL(item.source_url);if(url.protocol==='https:'){const link=document.createElement('a');link.className='source';link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.textContent='查看报道';meta.appendChild(link)}}catch{}
-   if(!meta.querySelector('a')&&typeof item.source_publisher==='string'&&item.source_publisher){
-    const publisher=document.createElement('span');publisher.textContent=item.source_publisher+'公众号';meta.appendChild(publisher);
-   }
-   card.appendChild(meta);container.appendChild(card);
-  }
+  recentEntries=data.schools.filter(x=>x&&typeof x.school==='string'&&x.school.trim());
+  renderRecentSchools();
  }catch{container.textContent='最近报道暂时无法加载，请稍后刷新页面。'}
 }
 loadRecentSchools();
