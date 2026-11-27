@@ -22,7 +22,7 @@
 .download-status:empty{display:none}
 .ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-help{margin:12px 0;color:#426577}.ranking-help summary{cursor:pointer;font-weight:600;color:#086a71}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}.ranking-school-label{flex:1;max-width:330px;min-width:200px!important}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
 #ranking-school{display:block;margin:8px 0 0;padding:10px 12px;font-size:16px;min-height:42px}
-.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.year-overview table th,.year-overview table td{padding:10px 14px}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
+.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.year-overview tfoot th,.year-overview tfoot td{font-weight:700;background:#e6f2f1}.year-overview table th,.year-overview table td{padding:10px 14px}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
 .guestbook h2{font-size:18px;margin:0 0 16px}
 .guestbook textarea{width:100%;display:block;margin:10px 0 0;padding:12px;border:1px solid #b9cdd7;border-radius:8px;font:inherit;color:inherit;resize:vertical}
 .guestbook textarea:focus-visible{outline:2px solid #129c90;outline-offset:2px}
@@ -486,8 +486,19 @@ function renderYearOverview(id,name,group,scope,isCurrent){
  const container=el(id),years=['2026','2025','2024','2023','2022','2021','2020'];
  const groupName={all:'全部高校','985':'985 高校','211':'211 高校',normal:'师范类高校'}[group];
  container.hidden=false;
- container.innerHTML='<h2>'+esc(name)+' · 历年排名总览</h2><p>范围：'+esc(groupName)+'；2026 年为'+(scope==='regular'?'常规赛道':'全部赛道')+'，其他年份为已收录全部赛道。按一等奖、二等奖、三等奖、优秀奖依次排序，同奖项数并列。2026 年数据尚不完整，2021 年讲课类仅含已收录的一、二等奖；2020 年部分赛道待核。未收录不代表未获奖。</p><div class="tablewrap"><table><thead><tr><th>年份</th><th>排名</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody></tbody></table></div>';
+ container.innerHTML='<h2>'+esc(name)+' · 历年排名总览</h2><p>范围：'+esc(groupName)+'；2026 年为'+(scope==='regular'?'常规赛道':'全部赛道')+'，其他年份为已收录全部赛道。按一等奖、二等奖、三等奖、优秀奖依次排序，同奖项数并列。2026 年数据尚不完整，2021 年讲课类仅含已收录的一、二等奖；2020 年部分赛道待核。总计中的三等奖、优秀奖仅包含 2020—2025 年已收录数据。未收录不代表未获奖。</p><div class="tablewrap"><table><thead><tr><th>年份</th><th>排名</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody></tbody><tfoot><tr><th scope="row">总计</th><td colspan="5">正在计算总计和总排名…</td></tr></tfoot></table></div>';
  const body=container.querySelector('tbody');
+ const totalRow=container.querySelector('tfoot tr');
+ Promise.all(years.map(year=>getRankingYear(year,scope))).then(lists=>{
+  if(!isCurrent())return;
+  const matches=rankSchools(lists,group).filter(item=>normalizeSchool(item.row.school)===normalizeSchool(name));
+  totalRow.replaceChildren();
+  const values=matches.length===1?['总计','第 '+matches[0].rank+' 名',matches[0].row.first,matches[0].row.second,matches[0].row.third,matches[0].row.excellent]:['总计',matches.length?'校名有歧义':'未收录'];
+  values.forEach((value,index)=>{const cell=document.createElement(index===0?'th':'td');if(index===0)cell.scope='row';if(index===1&&values.length===2)cell.colSpan=5;cell.textContent=String(value);totalRow.appendChild(cell)});
+ }).catch(()=>{
+  if(!isCurrent())return;
+  totalRow.lastChild.textContent='部分年份加载失败，暂无法计算总计和总排名。';
+ });
  const cells=new Map();
  for(const year of years){
   const tr=document.createElement('tr');
