@@ -42,7 +42,7 @@
 <main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button><button type="button" id="view-comments-button">留言</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校完整名称，查询获奖作品和历年已收录获奖数量。</p></div></div>
 <section class="panel"><form id="search"><label for="school">高校完整名称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
 <details class="search-guide"><summary>查询说明</summary><ul>
-<li><strong>输入校名：</strong>输入至少 3 个字符的完整高校名称，例如“南京邮电大学”；也可查询名单中单独列出的完整校区名称。</li>
+<li><strong>输入校名：</strong>输入至少 3 个字符的完整高校名称，例如“南京邮电大学”；已注明校区可输入对应完整校区名称。合肥工业大学（宣城）与合肥工业大学宣城校区均可查询宣城校区。</li>
 <li><strong>查看结果：</strong>展示 2026 年已收录作品，以及 2020—2025 年各奖项数量；可展开往年明细。</li>
 <li><strong>筛选与下载：</strong>奖项筛选作用于 2026 年作品；有查询结果时可下载获奖汇总图。</li>
 <li><strong>数据范围：</strong>页面只反映已收录的信息；2026 年二等奖尚未收全，未查到记录不代表未获奖。</li>
@@ -96,19 +96,19 @@
 <p>2022 年命题类名单有 49 项奖级写作“二等级”。根据组委会承办校公布的二等奖总数，查询按二等奖统计，原始写法随记录留存。</p>
 <p>2026 年一等奖以现场拟授一等奖名单为基础，并以高校官方报道核实题名和师生信息；二等奖仅收录官方报道中可明确识别的获奖作品。统计显示的是已收录数量，不代表该校完整获奖总数。</p>
 <p>“赛道按规则判定”表示结合作品题名和竞赛文件归类，尚待官方参赛明细确认；其判断依据和不确定性随作品列出。未公布的信息保持空缺，不以同校其他作品的人员代填。</p>
-<p>按高校全称查询；原名单未注明校区一般按本部处理，四川师范大学各项目校区待核。官网补录作品不编造原名单序号或页码。原始照片和完整数据文件不在公开网页中。</p></details>
+<p>按高校全称查询；明确标注的校区按数据库中校区名称分别统计。原名单未注明校区的记录暂按本部口径计入，并不表示实际校区已经核实；四川师范大学各项目校区待核。官网补录作品不编造原名单序号或页码。原始照片和完整数据文件不在公开网页中。</p></details>
 </div><div id="ranking-view" hidden><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖排名</p><h1>高校获奖排名</h1><p>按年度、赛道和高校范围查看获奖排名。</p></div></div><section class="panel ranking" id="ranking-panel" aria-labelledby="ranking-heading"><h2 id="ranking-heading">高校获奖排名</h2>
 <details class="ranking-help"><summary>排名规则与统计口径</summary>
-<p class="ranking-note">按已收录的一等奖、二等奖、三等奖、优秀奖数量依次排序，四项数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。2020—2026 年合计按各年已收录数据累计，三等奖及优秀奖仅含 2020—2025 年；2026 年常规赛道筛选排除国际赛道，未注明赛道的记录仍计入。校区按数据库归并校名统计。2026 年另有 17 项一等奖校名待核实，保留在数据库作品总数中，暂不参与高校排名。</p>
+<p class="ranking-note">按已收录的一等奖、二等奖、三等奖、优秀奖数量依次排序，四项数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。2020—2026 年合计按各年已收录数据累计，三等奖及优秀奖仅含 2020—2025 年；2026 年常规赛道筛选排除国际赛道，未注明赛道的记录仍计入。明确标注的校区按数据库中的校区名称分别统计，未注明校区的记录暂按本部口径计入，并不表示实际校区已核实。2026 年另有 17 项一等奖校名待核实，保留在数据库作品总数中，暂不参与高校排名。</p>
 <p class="ranking-note">2020 年部分作品题名、赛道仍待核实，学校和奖项已按原始名单计入；2021 年讲课类目前仅收录官网作品集的一、二等奖，三等奖及优秀奖尚缺。年度及合计排名均为已收录数据排名，未收录不代表未获奖。</p>
-<p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
+<p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。已单列的校区按所属高校继承 985/211 筛选资格并分别显示，不代表另增独立高校。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
 <p class="ranking-note" id="ranking-coverage"></p></details>
 <div class="ranking-controls"><label class="ranking-school-label" for="ranking-school">搜索高校<input id="ranking-school" type="search" placeholder="输入高校名称" autocomplete="off"></label><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="2021">2021 年</option><option value="2020">2020 年</option><option value="all">2020—2026 年合计</option><option value="overview">历年排名总览（需精确校名）</option></select></label>
 <label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
 <details class="search-guide"><summary>搜索与排名说明</summary><ul>
-<li><strong>搜索高校：</strong>留空显示所选范围内全部高校。选择单个年份或多年合计时，可输入部分校名；有完整名称匹配时优先显示该校，否则显示名称中包含所输入文字的高校；点击排名表中的高校名称可查看获奖明细。</li>
+<li><strong>搜索高校：</strong>留空显示所选范围内全部高校。选择单个年份或多年合计时，可输入部分校名；有完整名称匹配时优先显示该校，否则显示名称中包含所输入文字的高校；例如输入“哈尔滨工业”可同时查看本部、深圳和威海，输入完整校名则优先精确匹配；点击排名表中的高校名称可查看获奖明细。</li>
 <li><strong>历年排名总览：</strong>在“年份”中选择该选项并输入完整校名，可查看 2020—2026 年逐年排名、各奖项数量，以及表格末尾的累计数量和总排名；可下载单校排名总览图，完整排名名单不提供截图下载。</li>
-<li><strong>筛选范围：</strong>可选择全部高校、985、211 或师范类高校；2026 年还可选择全部赛道或常规赛道。常规赛道筛选排除国际赛道，未注明赛道的记录仍会计入；2020—2025 年采用已收录的全部赛道。</li>
+<li><strong>筛选范围：</strong>可选择全部高校、985、211 或师范类高校；单列校区按所属高校继承 985/211 筛选资格，分别参与排名。2026 年还可选择全部赛道或常规赛道。常规赛道筛选排除国际赛道，未注明赛道的记录仍会计入；2020—2025 年采用已收录的全部赛道。</li>
 <li><strong>排名规则：</strong>按一等奖、二等奖、三等奖、优秀奖数量依次排序，各奖项数量相同则并列。筛选高校名称不改变其在所选范围内的排名。</li>
 <li><strong>数据说明：</strong>排名基于已收录数据。2026 年名单尚不完整，三等奖、优秀奖尚未收录；2021 年讲课类数据不完整。未收录不代表未获奖。</li>
 </ul></details>
@@ -147,6 +147,11 @@ const cats=['命题类','自选类','讲课类','国际赛道','未注明赛道'
 const el=id=>document.getElementById(id);
 const historyLevels=['一等奖','二等奖','三等奖','优秀奖'];
 const historyYears=['2025','2024','2023','2022','2021','2020'];
+// Normalize a known alias before querying or matching ranked schools.
+function canonicalSchool(value){
+ const trimmed=value.trim().replace(/\(/g,'（').replace(/\)/g,'）');
+ return trimmed.replace(/\s+/g,'')==='合肥工业大学（宣城）'?'合肥工业大学宣城校区':trimmed;
+}
 let controller, rows=[], school='', loaded=false, currentFailed=false;
 const historyResults=new Map();
 const countAward=(data,level)=>data.filter(row=>row.award_level===level).length;
@@ -178,7 +183,7 @@ function card(x){
  const reportSource=linkedReport||(r?.source_publisher?esc(r.source_publisher)+'公众号'+(r.source_title?' · '+esc(r.source_title):''):'');
  const reportLine=[reportSource,r?.published_date?'发布于 '+esc(r.published_date):''].filter(Boolean).join(' · ');
  return '<article class="card"><div class="top"><strong>'+esc(x.school)+'</strong><div class="badgegroup"><span class="tag '+(second?'award-second':'award-first')+'">'+award+'</span><span class="tag '+(!verified?'pending':'')+'">'+esc(status)+'</span></div></div>'+
- '<p class="title">'+esc(x.topic)+'</p><div class="meta"><p>'+esc(track)+(inferred?' <span class="tag pending">赛道按规则判定</span>':'')+'</p><p>'+esc(original)+' · '+esc(x.campus_status||'未单列校区')+'</p>'+
+ '<p class="title">'+esc(x.topic)+'</p><div class="meta"><p>'+esc(track)+(inferred?' <span class="tag pending">赛道按规则判定</span>':'')+'</p><p>'+esc(original)+' · '+esc(x.campus_status||'校区信息以高校名称为准')+'</p>'+
  (r?'<p>参赛选手：'+esc(team)+'</p><p>指导教师：'+esc(teachers)+'</p>'+(reportLine?'<p>'+reportLine+'</p>':''):'')+'</div>'+
  (inferred?'<details class="rule"><summary>赛道判断依据</summary><p>'+esc(r.track_assessment.basis)+'</p><p>'+esc(r.track_assessment.source_filename)+' · 第 '+esc(r.track_assessment.source_page)+' 页</p></details>':'')+
  (notes.length?'<div class="uncertainty">'+notes.map(esc).join('<br>')+'</div>':'')+'</article>';
@@ -211,7 +216,7 @@ function updateDownload(){
  el('download-summary').hidden=historyResults.size<historyYears.length||!hasResults;
 }
 async function search(){
- const q=el('school').value.trim();
+ const q=canonicalSchool(el('school').value);
  if(q.length<3){el('count').textContent='请输入至少 3 个字符的完整高校名称';return}
  controller?.abort();
  const request=new AbortController();
@@ -457,6 +462,9 @@ loadRecentSchools();
 
 const colleges985=new Set('北京大学 中国人民大学 清华大学 北京航空航天大学 北京理工大学 中国农业大学 北京师范大学 中央民族大学 南开大学 天津大学 大连理工大学 东北大学 吉林大学 哈尔滨工业大学 复旦大学 同济大学 上海交通大学 华东师范大学 南京大学 东南大学 浙江大学 中国科学技术大学 厦门大学 山东大学 中国海洋大学 武汉大学 华中科技大学 湖南大学 中南大学 国防科技大学 国防科学技术大学 中国人民解放军国防科技大学 中山大学 华南理工大学 四川大学 电子科技大学 重庆大学 西安交通大学 西北工业大学 西北农林科技大学 兰州大学'.split(' '));
 const colleges211=new Set(('北京大学 中国人民大学 清华大学 北京交通大学 北京工业大学 北京航空航天大学 北京理工大学 北京科技大学 北京化工大学 北京邮电大学 中国农业大学 北京林业大学 北京中医药大学 北京师范大学 北京外国语大学 中国传媒大学 中央财经大学 对外经济贸易大学 北京体育大学 中央音乐学院 中央民族大学 中国政法大学 华北电力大学 南开大学 天津大学 天津医科大学 河北工业大学 太原理工大学 内蒙古大学 辽宁大学 大连理工大学 东北大学 大连海事大学 吉林大学 延边大学 东北师范大学 哈尔滨工业大学 哈尔滨工程大学 东北农业大学 东北林业大学 复旦大学 同济大学 上海交通大学 华东理工大学 东华大学 华东师范大学 上海外国语大学 上海财经大学 上海大学 第二军医大学 海军军医大学 南京大学 苏州大学 东南大学 南京航空航天大学 南京理工大学 中国矿业大学 中国矿业大学（北京） 河海大学 江南大学 南京农业大学 中国药科大学 南京师范大学 浙江大学 安徽大学 中国科学技术大学 合肥工业大学 厦门大学 福州大学 南昌大学 山东大学 中国海洋大学 中国石油大学 中国石油大学（北京） 中国石油大学（华东） 郑州大学 武汉大学 华中科技大学 中国地质大学 中国地质大学（北京） 中国地质大学（武汉） 武汉理工大学 华中农业大学 华中师范大学 中南财经政法大学 湖南大学 中南大学 湖南师范大学 国防科学技术大学 国防科技大学 中山大学 暨南大学 华南理工大学 华南师范大学 广西大学 海南大学 四川大学 西南交通大学 电子科技大学 四川农业大学 西南财经大学 重庆大学 西南大学 贵州大学 云南大学 西藏大学 西北大学 西安交通大学 西北工业大学 西安电子科技大学 长安大学 西北农林科技大学 陕西师范大学 第四军医大学 空军军医大学 兰州大学 青海大学 宁夏大学 新疆大学 石河子大学').split(' '));
+// Explicit campus names inherit the category of their parent institution.
+['哈尔滨工业大学（深圳）','哈尔滨工业大学（威海）','东北大学秦皇岛分校','山东大学（威海）','中山大学广州校区','中山大学珠海校区','北京师范大学珠海校区','北京理工大学（珠海）','北京航空航天大学杭州校区'].forEach(name=>colleges985.add(name));
+['华北电力大学（保定）','中国石油大学（北京）克拉玛依校区','合肥工业大学宣城校区','北京交通大学威海校区','南京理工大学（江阴校区）'].forEach(name=>colleges211.add(name));
 const rankingCache=new Map();
 let rankingRequest=0;
 async function getRankingYear(year,scope){
@@ -469,7 +477,7 @@ async function getRankingYear(year,scope){
  rankingCache.set(cacheKey,data.schools);
  return data.schools;
 }
-const normalizeSchool=value=>value.normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase();
+const normalizeSchool=value=>canonicalSchool(value).normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase();
 function rankSchools(lists,group){
  const merged=new Map();
  for(const list of lists)for(const item of list){
