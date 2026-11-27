@@ -22,7 +22,7 @@
 .download-status:empty{display:none}
 .ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-help{margin:12px 0;color:#426577}.ranking-help summary{cursor:pointer;font-weight:600;color:#086a71}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}.ranking-school-label{flex:1;max-width:330px;min-width:200px!important}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
 #ranking-school{display:block;margin:8px 0 0;padding:10px 12px;font-size:16px;min-height:42px}
-.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.year-overview tfoot th,.year-overview tfoot td{font-weight:700;background:#e6f2f1}.year-overview table th,.year-overview table td{padding:10px 14px}.search-guide{margin:16px 0;padding:14px 16px;border:1px solid #d5e7e8;border-radius:10px;background:#f3f8f9;color:#345766}.search-guide summary{font-size:16px;font-weight:700;color:#173447;cursor:pointer}.search-guide summary:focus-visible{outline:2px solid #129c90;outline-offset:3px}.search-guide ul{margin:10px 0 0;padding-left:20px}.search-guide li{font-size:14px;line-height:1.65;margin:4px 0}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
+.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.overview-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}.overview-actions button{font-size:14px;padding:8px 12px}.overview-actions button:disabled{opacity:.55;cursor:wait}.overview-actions span{font-size:14px;color:#526e80}.year-overview tfoot th,.year-overview tfoot td{font-weight:700;background:#e6f2f1}.year-overview table th,.year-overview table td{padding:10px 14px}.search-guide{margin:16px 0;padding:14px 16px;border:1px solid #d5e7e8;border-radius:10px;background:#f3f8f9;color:#345766}.search-guide summary{font-size:16px;font-weight:700;color:#173447;cursor:pointer}.search-guide summary:focus-visible{outline:2px solid #129c90;outline-offset:3px}.search-guide ul{margin:10px 0 0;padding-left:20px}.search-guide li{font-size:14px;line-height:1.65;margin:4px 0}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
 .guestbook h2{font-size:18px;margin:0 0 16px}
 .guestbook textarea{width:100%;display:block;margin:10px 0 0;padding:12px;border:1px solid #b9cdd7;border-radius:8px;font:inherit;color:inherit;resize:vertical}
 .guestbook textarea:focus-visible{outline:2px solid #129c90;outline-offset:2px}
@@ -107,7 +107,7 @@
 <label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
 <details class="search-guide"><summary>搜索与排名说明</summary><ul>
 <li><strong>搜索高校：</strong>留空显示所选范围内全部高校。选择单个年份或多年合计时，可输入部分校名；有完整名称匹配时优先显示该校，否则显示名称中包含所输入文字的高校；点击排名表中的高校名称可查看获奖明细。</li>
-<li><strong>历年排名总览：</strong>在“年份”中选择该选项并输入完整校名，可查看 2020—2026 年逐年排名、各奖项数量，以及表格末尾的累计数量和总排名。</li>
+<li><strong>历年排名总览：</strong>在“年份”中选择该选项并输入完整校名，可查看 2020—2026 年逐年排名、各奖项数量，以及表格末尾的累计数量和总排名；可下载单校排名总览图，完整排名名单不提供截图下载。</li>
 <li><strong>筛选范围：</strong>可选择全部高校、985、211 或师范类高校；2026 年还可选择全部赛道或常规赛道。常规赛道筛选排除国际赛道，未注明赛道的记录仍会计入；2020—2025 年采用已收录的全部赛道。</li>
 <li><strong>排名规则：</strong>按一等奖、二等奖、三等奖、优秀奖数量依次排序，各奖项数量相同则并列。筛选高校名称不改变其在所选范围内的排名。</li>
 <li><strong>数据说明：</strong>排名基于已收录数据。2026 年名单尚不完整，三等奖、优秀奖尚未收录；2021 年讲课类数据不完整。未收录不代表未获奖。</li>
@@ -495,14 +495,55 @@ function rankSchools(lists,group){
   return {row,rank};
  });
 }
+function downloadRankingOverview(container,name,isCurrent){
+ const status=container.querySelector('.overview-actions span');
+ try{
+  const table=container.querySelector('table');
+  const data=Array.from(table.querySelectorAll('tbody tr,tfoot tr')).map(tr=>Array.from(tr.children,cell=>cell.textContent.trim()));
+  if(data.length!==8||/正在查询|正在计算|暂无法|加载失败/.test(table.textContent))throw Error('not ready');
+  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+  if(!ctx)throw Error('canvas unavailable');
+  const width=1400,margin=64,columns=[80,290,550,760,970,1180];
+  const font='system-ui, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif';
+  const setFont=(size,weight=400)=>{ctx.font=weight+' '+size+'px '+font};
+  const wrap=(text,maxWidth)=>{const lines=[];let line='';for(const char of text){if(line&&ctx.measureText(line+char).width>maxWidth){lines.push(line);line=''}line+=char}if(line)lines.push(line);return lines};
+  setFont(23);const notes=wrap(container.querySelector('p').textContent,width-2*margin);
+  const headerHeight=105,tableTop=212,rowHeight=78,footerTop=tableTop+headerHeight+data.length*rowHeight+45;
+  canvas.width=width;canvas.height=footerTop+notes.length*36+94;
+  const text=(value,x,y,size,color,weight=400)=>{setFont(size,weight);ctx.fillStyle=color;ctx.fillText(String(value),x,y)};
+  ctx.fillStyle='#f3f6f9';ctx.fillRect(0,0,width,canvas.height);
+  ctx.fillStyle='#073a4e';ctx.fillRect(0,0,width,175);
+  text('全国大学生物理实验竞赛（创新）',margin,51,24,'#b8e9e1',600);
+  let titleSize=46;setFont(titleSize,700);while(ctx.measureText(name+' · 历年排名总览').width>width-2*margin&&titleSize>22)setFont(--titleSize,700);
+  text(name+' · 历年排名总览',margin,126,titleSize,'#ffffff',700);
+  ctx.fillStyle='#e3edf1';ctx.fillRect(margin,tableTop,width-2*margin,headerHeight);
+  ['年份','排名','一等奖','二等奖','三等奖','优秀奖'].forEach((label,i)=>text(label,columns[i],tableTop+65,26,'#173447',700));
+  data.forEach((row,index)=>{
+   const y=tableTop+headerHeight+index*rowHeight;
+   ctx.fillStyle=index===data.length-1?'#e1f2f0':'#ffffff';ctx.fillRect(margin,y,width-2*margin,rowHeight-1);
+   row.forEach((value,i)=>text(value,columns[i],y+51,26,'#173447',index===data.length-1||i===0?700:400));
+  });
+  notes.forEach((line,index)=>text(line,margin,footerTop+index*36,23,'#4d6979'));
+  const date=new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Shanghai',year:'numeric',month:'numeric',day:'numeric'}).format(new Date());
+  text('查询日期 '+date+'  ·  hwangbl.github.io/cupet-awards-query/',margin,canvas.height-30,21,'#4d6979');
+  canvas.toBlob(blob=>{
+   if(!isCurrent())return;
+   if(!blob){status.textContent='图片生成失败，请重试。';return}
+   const url=URL.createObjectURL(blob),link=document.createElement('a');
+   link.href=url;link.download=name.replace(/[\\/:*?"<>|]/g,'_')+'-CUPET历年排名总览.png';
+   document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  },'image/png');
+ }catch{status.textContent='图片生成失败或排名尚未加载完成，请重试。'}
+}
 function renderYearOverview(id,name,group,scope,isCurrent){
  const container=el(id),years=['2026','2025','2024','2023','2022','2021','2020'];
  const groupName={all:'全部高校','985':'985 高校','211':'211 高校',normal:'师范类高校'}[group];
  container.hidden=false;
- container.innerHTML='<h2>'+esc(name)+' · 历年排名总览</h2><p>范围：'+esc(groupName)+'；2026 年为'+(scope==='regular'?'常规赛道':'全部赛道')+'，其他年份为已收录全部赛道。按一等奖、二等奖、三等奖、优秀奖依次排序，同奖项数并列。2026 年数据尚不完整，2021 年讲课类仅含已收录的一、二等奖；2020 年部分赛道待核。总计中的三等奖、优秀奖仅包含 2020—2025 年已收录数据。未收录不代表未获奖。</p><div class="tablewrap"><table><thead><tr><th>年份</th><th>排名</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody></tbody><tfoot><tr><th scope="row">总计</th><td colspan="5">正在计算总计和总排名…</td></tr></tfoot></table></div>';
+ container.innerHTML='<h2>'+esc(name)+' · 历年排名总览</h2><p>范围：'+esc(groupName)+'；2026 年为'+(scope==='regular'?'常规赛道':'全部赛道')+'，其他年份为已收录全部赛道。按一等奖、二等奖、三等奖、优秀奖依次排序，同奖项数并列。2026 年数据尚不完整，2021 年讲课类仅含已收录的一、二等奖；2020 年部分赛道待核。总计中的三等奖、优秀奖仅包含 2020—2025 年已收录数据。未收录不代表未获奖。</p><div class="tablewrap"><table><thead><tr><th>年份</th><th>排名</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody></tbody><tfoot><tr><th scope="row">总计</th><td colspan="5">正在计算总计和总排名…</td></tr></tfoot></table></div><div class="overview-actions"><button type="button" disabled>下载排名总览图（PNG）</button><span role="status">正在准备排名数据…</span></div>';
+ const button=container.querySelector('.overview-actions button'),status=container.querySelector('.overview-actions span');
  const body=container.querySelector('tbody');
  const totalRow=container.querySelector('tfoot tr');
- Promise.all(years.map(year=>getRankingYear(year,scope))).then(lists=>{
+ const totalPromise=Promise.all(years.map(year=>getRankingYear(year,scope))).then(lists=>{
   if(!isCurrent())return;
   const matches=rankSchools(lists,group).filter(item=>normalizeSchool(item.row.school)===normalizeSchool(name));
   totalRow.replaceChildren();
@@ -518,7 +559,7 @@ function renderYearOverview(id,name,group,scope,isCurrent){
   const first=document.createElement('th');first.scope='row';first.textContent=year;tr.appendChild(first);
   const value=document.createElement('td');value.colSpan=5;value.textContent='正在查询…';tr.appendChild(value);body.appendChild(tr);cells.set(year,tr);
  }
- for(const year of years){
+ const yearPromises=years.map(year=>
   getRankingYear(year,scope).then(list=>{
    if(!isCurrent())return;
    const ranked=rankSchools([list],group);
@@ -529,8 +570,16 @@ function renderYearOverview(id,name,group,scope,isCurrent){
   }).catch(()=>{
    if(!isCurrent())return;
    const tr=cells.get(year),cell=tr.lastChild;cell.textContent='排名暂时无法加载';
-  });
- }
+  })
+ );
+ Promise.allSettled([totalPromise,...yearPromises]).then(()=>{
+  if(!isCurrent())return;
+  if(/暂无法|加载失败|正在查询|正在计算/.test(container.querySelector('table').textContent)){
+   status.textContent='部分排名未加载，暂不能下载，请稍后重试。';return;
+  }
+  button.disabled=false;status.textContent='';
+ });
+ button.onclick=()=>downloadRankingOverview(container,name,isCurrent);
 }
 async function renderRanking(){
  const request=++rankingRequest,year=el('ranking-year').value,group=el('ranking-group').value,scope=el('ranking-scope').value;
