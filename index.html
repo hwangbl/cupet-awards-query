@@ -22,7 +22,7 @@
 .download-status:empty{display:none}
 .ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-help{margin:12px 0;color:#426577}.ranking-help summary{cursor:pointer;font-weight:600;color:#086a71}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}.ranking-school-label{flex:1;max-width:330px;min-width:200px!important}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
 #ranking-school{display:block;margin:8px 0 0;padding:10px 12px;font-size:16px;min-height:42px}
-.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
+.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.year-overview table th,.year-overview table td{padding:10px 14px}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
 .guestbook h2{font-size:18px;margin:0 0 16px}
 .guestbook textarea{width:100%;display:block;margin:10px 0 0;padding:12px;border:1px solid #b9cdd7;border-radius:8px;font:inherit;color:inherit;resize:vertical}
 .guestbook textarea:focus-visible{outline:2px solid #129c90;outline-offset:2px}
@@ -39,8 +39,8 @@
 @media(max-width:700px){.guestbook{grid-template-columns:1fr}}
 </style></head><body>
 <header><span class="brand">CUPET <b>2026</b></span><span>全国大学生物理实验竞赛 · 创新</span></header>
-<main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button><button type="button" id="view-comments-button">留言</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称，查询 2026 年获奖作品及 2020–2025 年已收录获奖数量。</p></div></div>
-<section class="panel"><form id="search"><label for="school">高校全称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
+<main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button><button type="button" id="view-comments-button">留言</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称或部分名称，查询获奖作品和历年已收录获奖数量。</p></div></div>
+<section class="panel"><form id="search"><label for="school">高校名称（支持部分名称）</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
 <div id="recent-queries" style="margin-top:16px" hidden><label>最近查询的高校</label><div id="recent-query-list" class="chips" style="margin-top:8px"></div></div>
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
 <p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
@@ -97,9 +97,9 @@
 <p class="ranking-note">2020 年部分作品题名、赛道仍待核实，学校和奖项已按原始名单计入；2021 年讲课类目前仅收录官网作品集的一、二等奖，三等奖及优秀奖尚缺。年度及合计排名均为已收录数据排名，未收录不代表未获奖。</p>
 <p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
 <p class="ranking-note" id="ranking-coverage"></p></details>
-<div class="ranking-controls"><label class="ranking-school-label" for="ranking-school">搜索高校<input id="ranking-school" type="search" placeholder="输入高校名称" autocomplete="off"></label><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="2021">2021 年</option><option value="2020">2020 年</option><option value="all">2020—2026 年合计</option></select></label>
+<div class="ranking-controls"><label class="ranking-school-label" for="ranking-school">搜索高校<input id="ranking-school" type="search" placeholder="输入高校名称" autocomplete="off"></label><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="2021">2021 年</option><option value="2020">2020 年</option><option value="all">2020—2026 年合计</option><option value="overview">历年排名总览（需精确校名）</option></select></label>
 <label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
-<div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></section></div>
+<section id="ranking-year-overview" class="year-overview" hidden aria-live="polite"></section><div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></section></div>
 <div id="comments-view" hidden>
  <div class="intro"><div><h1>留言</h1><p>欢迎反馈获奖信息、提供高校官方报道链接或提出查询建议。提交后会立即公开，请勿填写联系方式等个人信息。</p></div></div>
  <div class="guestbook">
@@ -456,38 +456,88 @@ async function getRankingYear(year,scope){
  rankingCache.set(cacheKey,data.schools);
  return data.schools;
 }
+const normalizeSchool=value=>value.normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase();
+function rankSchools(lists,group){
+ const merged=new Map();
+ for(const list of lists)for(const item of list){
+  if(typeof item.school!=='string'||!item.school.trim()||item.school.trim()==='校名待核实')continue;
+  const name=item.school.trim();
+  if(!merged.has(name))merged.set(name,{school:name,first:0,second:0,third:0,excellent:0});
+  const row=merged.get(name);
+  for(const field of ['first','second','third','excellent'])row[field]+=Number(item[field])||0;
+ }
+ const sorted=Array.from(merged.values()).filter(row=>{
+  const name=row.school.replace(/\(/g,'（').replace(/\)/g,'）');
+  if(group==='985')return colleges985.has(name);
+  if(group==='211')return colleges211.has(name)||colleges985.has(name);
+  if(group==='normal')return name.includes('师范')||name.includes('师专')||name==='西南大学';
+  return true;
+ }).sort((a,b)=>b.first-a.first||b.second-a.second||b.third-a.third||b.excellent-a.excellent||a.school.localeCompare(b.school,'zh-CN'));
+ let previousRank=0;
+ return sorted.map((row,index)=>{
+  const previous=sorted[index-1];
+  const tied=previous&&['first','second','third','excellent'].every(field=>previous[field]===row[field]);
+  const rank=tied?previousRank:index+1;
+  previousRank=rank;
+  return {row,rank};
+ });
+}
+function renderYearOverview(id,name,group,scope,isCurrent){
+ const container=el(id),years=['2026','2025','2024','2023','2022','2021','2020'];
+ const groupName={all:'全部高校','985':'985 高校','211':'211 高校',normal:'师范类高校'}[group];
+ container.hidden=false;
+ container.innerHTML='<h2>'+esc(name)+' · 历年排名总览</h2><p>范围：'+esc(groupName)+'；2026 年为'+(scope==='regular'?'常规赛道':'全部赛道')+'，其他年份为已收录全部赛道。按一等奖、二等奖、三等奖、优秀奖依次排序，同奖项数并列。2026 年数据尚不完整，2021 年讲课类仅含已收录的一、二等奖；2020 年部分赛道待核。未收录不代表未获奖。</p><div class="tablewrap"><table><thead><tr><th>年份</th><th>排名</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody></tbody></table></div>';
+ const body=container.querySelector('tbody');
+ const cells=new Map();
+ for(const year of years){
+  const tr=document.createElement('tr');
+  const first=document.createElement('th');first.scope='row';first.textContent=year;tr.appendChild(first);
+  const value=document.createElement('td');value.colSpan=5;value.textContent='正在查询…';tr.appendChild(value);body.appendChild(tr);cells.set(year,tr);
+ }
+ for(const year of years){
+  getRankingYear(year,scope).then(list=>{
+   if(!isCurrent())return;
+   const ranked=rankSchools([list],group);
+   const matches=ranked.filter(item=>normalizeSchool(item.row.school)===normalizeSchool(name));
+   const tr=cells.get(year);tr.replaceChildren();
+   const values=matches.length===1?[year,'第 '+matches[0].rank+' 名',matches[0].row.first,matches[0].row.second,year==='2026'?'—':matches[0].row.third,year==='2026'?'—':matches[0].row.excellent]:[year,matches.length?'校名有歧义':'未收录'];
+   values.forEach((value,index)=>{const cell=document.createElement(index===0?'th':'td');if(index===0)cell.scope='row';if(index===1&&values.length===2)cell.colSpan=5;cell.textContent=String(value);tr.appendChild(cell)});
+  }).catch(()=>{
+   if(!isCurrent())return;
+   const tr=cells.get(year),cell=tr.lastChild;cell.textContent='排名暂时无法加载';
+  });
+ }
+}
 async function renderRanking(){
  const request=++rankingRequest,year=el('ranking-year').value,group=el('ranking-group').value,scope=el('ranking-scope').value;
- el('ranking-scope-label').hidden=year!=='2026'&&year!=='all';
- el('ranking-status').textContent='正在计算排名…';el('ranking-table-wrap').hidden=true;
+ el('ranking-scope-label').hidden=year!=='2026'&&year!=='all'&&year!=='overview';
+ el('ranking-status').textContent='正在计算排名…';el('ranking-table-wrap').hidden=true;el('ranking-year-overview').hidden=true;
  try{
+  if(year==='overview'){
+   const keyword=normalizeSchool(el('ranking-school').value.trim());
+   if(!keyword){el('ranking-status').textContent='请输入高校完整名称，以查看历年排名总览。';return}
+   const years=['2026','2025','2024','2023','2022','2021','2020'];
+   const results=await Promise.allSettled(years.map(item=>getRankingYear(item,scope)));
+   if(request!==rankingRequest)return;
+   const matches=new Set();
+   for(const result of results)if(result.status==='fulfilled')for(const item of rankSchools([result.value],group)){
+    if(normalizeSchool(item.row.school)===keyword)matches.add(item.row.school);
+   }
+   if(matches.size===1){
+    const name=Array.from(matches)[0];
+    el('ranking-status').textContent='';
+    renderYearOverview('ranking-year-overview',name,group,scope,()=>request===rankingRequest);
+   }else{
+    const failure=results.some(result=>result.status==='rejected');
+    el('ranking-status').textContent=matches.size>1?'校名有歧义，请输入数据库中的完整名称。':failure?'未找到精确匹配；部分年份暂不可用，请检查完整校名或稍后重试。':'未找到精确匹配。请选择正确的高校范围并输入完整校名；普通年份搜索支持部分名称。';
+   }
+   return;
+  }
   const years=year==='all'?['2020','2021','2022','2023','2024','2025','2026']:[year];
   const lists=await Promise.all(years.map(item=>getRankingYear(item,scope)));
   if(request!==rankingRequest)return;
-  const merged=new Map();
-  for(const list of lists)for(const item of list){
-   if(typeof item.school!=='string'||!item.school.trim()||item.school.trim()==='校名待核实')continue;
-   const name=item.school.trim();
-   if(!merged.has(name))merged.set(name,{school:name,first:0,second:0,third:0,excellent:0});
-   const row=merged.get(name);
-   for(const field of ['first','second','third','excellent'])row[field]+=Number(item[field])||0;
-  }
-  const rows=Array.from(merged.values()).filter(row=>{
-   const name=row.school.replace(/\(/g,'（').replace(/\)/g,'）');
-   if(group==='985')return colleges985.has(name);
-   if(group==='211')return colleges211.has(name)||colleges985.has(name);
-   if(group==='normal')return name.includes('师范')||name.includes('师专')||name==='西南大学';
-   return true;
-  }).sort((a,b)=>b.first-a.first||b.second-a.second||b.third-a.third||b.excellent-a.excellent||a.school.localeCompare(b.school,'zh-CN'));
-  let previousRank=0;
-  const ranked=rows.map((row,index)=>{
-   const previous=rows[index-1];
-   const tied=previous&&['first','second','third','excellent'].every(field=>previous[field]===row[field]);
-   const rank=tied?previousRank:index+1;
-   previousRank=rank;
-   return {row,rank};
-  });
-  const normalizeSchool=value=>value.normalize('NFKC').replace(/\s+/g,'').toLocaleLowerCase();
+  const ranked=rankSchools(lists,group);
+  const rows=ranked.map(item=>item.row);
   const keyword=normalizeSchool(el('ranking-school').value);
   const exact=keyword?ranked.filter(item=>normalizeSchool(item.row.school)===keyword):[];
   const shown=!keyword?ranked:exact.length?exact:ranked.filter(item=>normalizeSchool(item.row.school).includes(keyword));
@@ -526,7 +576,8 @@ function showView(view){
 for(const name of ['query','ranking','comments']){
  el('view-'+name+'-button').addEventListener('click',()=>showView(name));
 }
-el('ranking-school').addEventListener('input',renderRanking);
+let rankingInputTimer;
+el('ranking-school').addEventListener('input',()=>{rankingRequest++;clearTimeout(rankingInputTimer);el('ranking-year-overview').hidden=true;rankingInputTimer=setTimeout(renderRanking,250)});
 el('ranking-year').addEventListener('change',renderRanking);
 el('ranking-group').addEventListener('change',renderRanking);
 el('ranking-scope').addEventListener('change',renderRanking);
