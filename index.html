@@ -22,7 +22,7 @@
 .download-status:empty{display:none}
 .ranking{margin-top:20px}.ranking h2{font-size:18px;margin:0}.view-nav{margin:0 0 28px;flex-wrap:wrap}.view-nav .active{background:#073a4e;color:#fff;border-color:#073a4e}.view-nav button:focus-visible{outline:2px solid #129c90;outline-offset:2px}.ranking-note{color:#617788;font-size:13px;line-height:1.7}.ranking-help{margin:12px 0;color:#426577}.ranking-help summary{cursor:pointer;font-weight:600;color:#086a71}.ranking-controls{display:flex;gap:16px;flex-wrap:wrap;margin:12px 0}.ranking-controls label{min-width:150px}.ranking-school-label{flex:1;max-width:330px;min-width:200px!important}#ranking-status{font-size:14px;color:#617788;margin:12px 0}.ranking table td:first-child{font-weight:700}.ranking table button{color:#085d72;font-weight:600}.ranking table th,.ranking table td{padding:12px 16px}[hidden]{display:none!important}
 #ranking-school{display:block;margin:8px 0 0;padding:10px 12px;font-size:16px;min-height:42px}
-.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.year-overview tfoot th,.year-overview tfoot td{font-weight:700;background:#e6f2f1}.year-overview table th,.year-overview table td{padding:10px 14px}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
+.year-overview{margin:18px 0;padding:18px;background:#f3f8f9;border:1px solid #d5e7e8;border-radius:10px}.year-overview h2{font-size:18px;margin:0 0 8px}.year-overview p{font-size:14px;color:#526e80;margin:6px 0 12px}.year-overview .tablewrap{border-radius:8px}.year-overview tfoot th,.year-overview tfoot td{font-weight:700;background:#e6f2f1}.year-overview table th,.year-overview table td{padding:10px 14px}.search-guide{margin:16px 0;padding:14px 16px;border:1px solid #d5e7e8;border-radius:10px;background:#f3f8f9;color:#345766}.search-guide h2,.ranking .search-guide h3{font-size:16px;margin:0 0 8px;color:#173447}.search-guide ul{margin:0;padding-left:20px}.search-guide li{font-size:14px;line-height:1.65;margin:4px 0}.guestbook{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:16px;align-items:start}
 .guestbook h2{font-size:18px;margin:0 0 16px}
 .guestbook textarea{width:100%;display:block;margin:10px 0 0;padding:12px;border:1px solid #b9cdd7;border-radius:8px;font:inherit;color:inherit;resize:vertical}
 .guestbook textarea:focus-visible{outline:2px solid #129c90;outline-offset:2px}
@@ -39,8 +39,14 @@
 @media(max-width:700px){.guestbook{grid-template-columns:1fr}}
 </style></head><body>
 <header><span class="brand">CUPET <b>2026</b></span><span>全国大学生物理实验竞赛 · 创新</span></header>
-<main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button><button type="button" id="view-comments-button">留言</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校全称或部分名称，查询获奖作品和历年已收录获奖数量。</p></div></div>
-<section class="panel"><form id="search"><label for="school">高校名称（支持部分名称）</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
+<main><nav class="view-nav" aria-label="页面导航"><button type="button" id="view-query-button" class="active" aria-current="page">高校获奖查询</button><button type="button" id="view-ranking-button">高校获奖排名</button><button type="button" id="view-comments-button">留言</button></nav><div id="query-view"><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖查询</p><h1>查询高校获奖情况</h1><p>输入高校完整名称，查询获奖作品和历年已收录获奖数量。</p></div></div>
+<section class="panel"><form id="search"><label for="school">高校完整名称</label><input id="school" required minlength="3" maxlength="60" placeholder="例如：南京邮电大学"><button>查询</button></form>
+<div class="search-guide" aria-labelledby="query-guide-title"><h2 id="query-guide-title">查询说明</h2><ul>
+<li><strong>输入校名：</strong>输入至少 3 个字符的完整高校名称，例如“南京邮电大学”；也可查询名单中单独列出的完整校区名称。</li>
+<li><strong>查看结果：</strong>展示 2026 年已收录作品，以及 2020—2025 年各奖项数量；可展开往年明细。</li>
+<li><strong>筛选与下载：</strong>奖项筛选作用于 2026 年作品；有查询结果时可下载获奖汇总图。</li>
+<li><strong>数据范围：</strong>页面只反映已收录的信息；2026 年二等奖尚未收全，未查到记录不代表未获奖。</li>
+</ul></div>
 <div id="recent-queries" style="margin-top:16px" hidden><label>最近查询的高校</label><div id="recent-query-list" class="chips" style="margin-top:8px"></div></div>
 <div class="filters"><label for="award-filter">奖项<select id="award-filter"><option value="all">全部奖项</option><option value="一等奖">一等奖</option><option value="二等奖">二等奖</option></select></label></div>
 <p class="notice">二等奖依据高校官方报道持续补充，尚非全国完整名单。未收录不代表未获奖；一等奖中尚未获官网确认的项目保留“拟授”标记。师生姓名保留姓氏，其余文字以星号隐藏。</p>
@@ -93,12 +99,19 @@
 <p>按高校全称查询；原名单未注明校区一般按本部处理，四川师范大学各项目校区待核。官网补录作品不编造原名单序号或页码。原始照片和完整数据文件不在公开网页中。</p></details>
 </div><div id="ranking-view" hidden><div class="intro"><div><p class="eyebrow">AWARDS EXPLORER / 高校获奖排名</p><h1>高校获奖排名</h1><p>按年度、赛道和高校范围查看获奖排名。</p></div></div><section class="panel ranking" id="ranking-panel" aria-labelledby="ranking-heading"><h2 id="ranking-heading">高校获奖排名</h2>
 <details class="ranking-help"><summary>排名规则与统计口径</summary>
-<p class="ranking-note">按已收录的一等奖、二等奖、三等奖、优秀奖数量依次排序，四项数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。2020—2026 年合计按各年已收录数据累计，三等奖及优秀奖仅含 2020—2025 年；常规赛道包括命题、自选、讲课类。校区按数据库归并校名统计。2026 年另有 17 项一等奖校名待核实，保留在数据库作品总数中，暂不参与高校排名。</p>
+<p class="ranking-note">按已收录的一等奖、二等奖、三等奖、优秀奖数量依次排序，四项数量相同并列；点击学校名称查询明细。2026 年一等奖含现场拟授，二等奖尚未收录完整，三等奖及优秀奖尚未收录。2020—2026 年合计按各年已收录数据累计，三等奖及优秀奖仅含 2020—2025 年；2026 年常规赛道筛选排除国际赛道，未注明赛道的记录仍计入。校区按数据库归并校名统计。2026 年另有 17 项一等奖校名待核实，保留在数据库作品总数中，暂不参与高校排名。</p>
 <p class="ranking-note">2020 年部分作品题名、赛道仍待核实，学校和奖项已按原始名单计入；2021 年讲课类目前仅收录官网作品集的一、二等奖，三等奖及优秀奖尚缺。年度及合计排名均为已收录数据排名，未收录不代表未获奖。</p>
 <p class="ranking-note">985、211 参考原工程高校名单，211 包含 985；师范类按校名含“师范”或“师专”筛选，另包含西南大学。相关名单与校区口径可能存在差异。<a class="source" href="https://www.moe.gov.cn/srcsite/A22/s7065/200612/t20061206_128833.html" target="_blank" rel="noopener noreferrer">985 名单</a> · <a class="source" href="https://www.jiashan.gov.cn/module/download/downfile.jsp?classid=0&amp;filename=c51e18acf97b451dbac12c7f1f00c4fc.pdf" target="_blank" rel="noopener noreferrer">211 名单</a></p>
 <p class="ranking-note" id="ranking-coverage"></p></details>
 <div class="ranking-controls"><label class="ranking-school-label" for="ranking-school">搜索高校<input id="ranking-school" type="search" placeholder="输入高校名称" autocomplete="off"></label><label for="ranking-year">年份<select id="ranking-year"><option value="2026">2026 年</option><option value="2025">2025 年</option><option value="2024">2024 年</option><option value="2023">2023 年</option><option value="2022">2022 年</option><option value="2021">2021 年</option><option value="2020">2020 年</option><option value="all">2020—2026 年合计</option><option value="overview">历年排名总览（需精确校名）</option></select></label>
 <label for="ranking-group">高校范围<select id="ranking-group"><option value="all">全部高校</option><option value="985">985 高校</option><option value="211">211 高校</option><option value="normal">师范类高校</option></select></label><label id="ranking-scope-label" for="ranking-scope">2026 年赛道<select id="ranking-scope"><option value="all">全部赛道</option><option value="regular">常规赛道</option></select></label></div>
+<div class="search-guide" aria-labelledby="ranking-guide-title"><h3 id="ranking-guide-title">搜索与排名说明</h3><ul>
+<li><strong>搜索高校：</strong>留空显示所选范围内全部高校。选择单个年份或多年合计时，可输入部分校名；有完整名称匹配时优先显示该校，否则显示名称中包含所输入文字的高校；点击排名表中的高校名称可查看获奖明细。</li>
+<li><strong>历年排名总览：</strong>在“年份”中选择该选项并输入完整校名，可查看 2020—2026 年逐年排名、各奖项数量，以及表格末尾的累计数量和总排名。</li>
+<li><strong>筛选范围：</strong>可选择全部高校、985、211 或师范类高校；2026 年还可选择全部赛道或常规赛道。常规赛道筛选排除国际赛道，未注明赛道的记录仍会计入；2020—2025 年采用已收录的全部赛道。</li>
+<li><strong>排名规则：</strong>按一等奖、二等奖、三等奖、优秀奖数量依次排序，各奖项数量相同则并列。筛选高校名称不改变其在所选范围内的排名。</li>
+<li><strong>数据说明：</strong>排名基于已收录数据。2026 年名单尚不完整，三等奖、优秀奖尚未收录；2021 年讲课类数据不完整。未收录不代表未获奖。</li>
+</ul></div>
 <section id="ranking-year-overview" class="year-overview" hidden aria-live="polite"></section><div id="ranking-status" role="status"></div><div class="tablewrap" id="ranking-table-wrap" hidden><table><thead><tr><th>排名</th><th>高校</th><th>一等奖</th><th>二等奖</th><th>三等奖</th><th>优秀奖</th></tr></thead><tbody id="ranking-body"></tbody></table></div></section></div>
 <div id="comments-view" hidden>
  <div class="intro"><div><h1>留言</h1><p>欢迎反馈获奖信息、提供高校官方报道链接或提出查询建议。提交后会立即公开，请勿填写联系方式等个人信息。</p></div></div>
@@ -199,7 +212,7 @@ function updateDownload(){
 }
 async function search(){
  const q=el('school').value.trim();
- if(q.length<3){el('count').textContent='请输入完整高校名称';return}
+ if(q.length<3){el('count').textContent='请输入至少 3 个字符的完整高校名称';return}
  controller?.abort();
  const request=new AbortController();
  controller=request;
